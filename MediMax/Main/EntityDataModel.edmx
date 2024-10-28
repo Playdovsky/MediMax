@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MediMaxModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="MediMaxModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="tbl_Leki">
           <Key>
             <PropertyRef Name="Id" />
@@ -51,7 +51,25 @@
           <Property Name="Haslo" Type="char" MaxLength="128" Nullable="false" />
           <Property Name="IdRola" Type="int" Nullable="false" />
         </EntityType>
-        <Association Name="FK__tbl_Recep__IdLek__38996AB5">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'MediMax.sys.database_firewall_rules' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="database_firewall_rules">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="name" />
+            <PropertyRef Name="start_ip_address" />
+            <PropertyRef Name="end_ip_address" />
+            <PropertyRef Name="create_date" />
+            <PropertyRef Name="modify_date" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="start_ip_address" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="end_ip_address" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="create_date" Type="datetime" Nullable="false" />
+          <Property Name="modify_date" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__tbl_Recep__IdLek__6477ECF3">
           <End Role="tbl_Leki" Type="Self.tbl_Leki" Multiplicity="1" />
           <End Role="tbl_Recepta" Type="Self.tbl_Recepta" Multiplicity="*" />
           <ReferentialConstraint>
@@ -63,7 +81,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__tbl_Uzytk__IdRol__2E1BDC42">
+        <Association Name="FK__tbl_Uzytk__IdRol__656C112C">
           <End Role="tbl_Rola" Type="Self.tbl_Rola" Multiplicity="1" />
           <End Role="tbl_Uzytkownik" Type="Self.tbl_Uzytkownik" Multiplicity="*" />
           <ReferentialConstraint>
@@ -81,17 +99,26 @@
           <EntitySet Name="tbl_ReceptaZalecenia" EntityType="Self.tbl_ReceptaZalecenia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_Rola" EntityType="Self.tbl_Rola" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_Uzytkownik" EntityType="Self.tbl_Uzytkownik" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__tbl_Recep__IdLek__38996AB5" Association="Self.FK__tbl_Recep__IdLek__38996AB5">
+          <EntitySet Name="database_firewall_rules" EntityType="Self.database_firewall_rules" store:Type="Views" store:Schema="sys">
+            <DefiningQuery>SELECT 
+    [database_firewall_rules].[id] AS [id], 
+    [database_firewall_rules].[name] AS [name], 
+    [database_firewall_rules].[start_ip_address] AS [start_ip_address], 
+    [database_firewall_rules].[end_ip_address] AS [end_ip_address], 
+    [database_firewall_rules].[create_date] AS [create_date], 
+    [database_firewall_rules].[modify_date] AS [modify_date]
+    FROM [sys].[database_firewall_rules] AS [database_firewall_rules]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK__tbl_Recep__IdLek__6477ECF3" Association="Self.FK__tbl_Recep__IdLek__6477ECF3">
             <End Role="tbl_Leki" EntitySet="tbl_Leki" />
             <End Role="tbl_Recepta" EntitySet="tbl_Recepta" />
           </AssociationSet>
-          <AssociationSet Name="FK__tbl_Uzytk__IdRol__2E1BDC42" Association="Self.FK__tbl_Uzytk__IdRol__2E1BDC42">
+          <AssociationSet Name="FK__tbl_Uzytk__IdRol__656C112C" Association="Self.FK__tbl_Uzytk__IdRol__656C112C">
             <End Role="tbl_Rola" EntitySet="tbl_Rola" />
             <End Role="tbl_Uzytkownik" EntitySet="tbl_Uzytkownik" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MediMaxModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -104,7 +131,7 @@
           <Property Name="Typ" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="CzyNaRecepte" Type="Boolean" Nullable="false" />
           <Property Name="Cena" Type="Decimal" Precision="10" Scale="2" />
-          <NavigationProperty Name="tbl_Recepta" Relationship="Self.FK__tbl_Recep__IdLek__38996AB5" FromRole="tbl_Leki" ToRole="tbl_Recepta" />
+          <NavigationProperty Name="tbl_Recepta" Relationship="Self.FK__tbl_Recep__IdLek__6477ECF3" FromRole="tbl_Leki" ToRole="tbl_Recepta" />
         </EntityType>
         <EntityType Name="tbl_Recepta">
           <Key>
@@ -115,7 +142,7 @@
           <Property Name="NumerRecepty" Type="Int32" Nullable="false" />
           <Property Name="PESEL" Type="String" MaxLength="11" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="CzyZrealizowano" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="tbl_Leki" Relationship="Self.FK__tbl_Recep__IdLek__38996AB5" FromRole="tbl_Recepta" ToRole="tbl_Leki" />
+          <NavigationProperty Name="tbl_Leki" Relationship="Self.FK__tbl_Recep__IdLek__6477ECF3" FromRole="tbl_Recepta" ToRole="tbl_Leki" />
         </EntityType>
         <EntityType Name="tbl_ReceptaZalecenia">
           <Key>
@@ -131,7 +158,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nazwa" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="tbl_Uzytkownik" Relationship="Self.FK__tbl_Uzytk__IdRol__2E1BDC42" FromRole="tbl_Rola" ToRole="tbl_Uzytkownik" />
+          <NavigationProperty Name="tbl_Uzytkownik" Relationship="Self.FK__tbl_Uzytk__IdRol__656C112C" FromRole="tbl_Rola" ToRole="tbl_Uzytkownik" />
         </EntityType>
         <EntityType Name="tbl_Uzytkownik">
           <Key>
@@ -143,9 +170,25 @@
           <Property Name="Email" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Haslo" Type="String" MaxLength="128" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="IdRola" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="tbl_Rola" Relationship="Self.FK__tbl_Uzytk__IdRol__2E1BDC42" FromRole="tbl_Uzytkownik" ToRole="tbl_Rola" />
+          <NavigationProperty Name="tbl_Rola" Relationship="Self.FK__tbl_Uzytk__IdRol__656C112C" FromRole="tbl_Uzytkownik" ToRole="tbl_Rola" />
         </EntityType>
-        <Association Name="FK__tbl_Recep__IdLek__38996AB5">
+        <EntityType Name="database_firewall_rules">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="name" />
+            <PropertyRef Name="start_ip_address" />
+            <PropertyRef Name="end_ip_address" />
+            <PropertyRef Name="create_date" />
+            <PropertyRef Name="modify_date" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="start_ip_address" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="end_ip_address" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="create_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="modify_date" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <Association Name="FK__tbl_Recep__IdLek__6477ECF3">
           <End Role="tbl_Leki" Type="Self.tbl_Leki" Multiplicity="1" />
           <End Role="tbl_Recepta" Type="Self.tbl_Recepta" Multiplicity="*" />
           <ReferentialConstraint>
@@ -157,7 +200,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__tbl_Uzytk__IdRol__2E1BDC42">
+        <Association Name="FK__tbl_Uzytk__IdRol__656C112C">
           <End Role="tbl_Rola" Type="Self.tbl_Rola" Multiplicity="1" />
           <End Role="tbl_Uzytkownik" Type="Self.tbl_Uzytkownik" Multiplicity="*" />
           <ReferentialConstraint>
@@ -175,11 +218,12 @@
           <EntitySet Name="tbl_ReceptaZalecenia" EntityType="Self.tbl_ReceptaZalecenia" />
           <EntitySet Name="tbl_Rola" EntityType="Self.tbl_Rola" />
           <EntitySet Name="tbl_Uzytkownik" EntityType="Self.tbl_Uzytkownik" />
-          <AssociationSet Name="FK__tbl_Recep__IdLek__38996AB5" Association="Self.FK__tbl_Recep__IdLek__38996AB5">
+          <EntitySet Name="database_firewall_rules" EntityType="Self.database_firewall_rules" />
+          <AssociationSet Name="FK__tbl_Recep__IdLek__6477ECF3" Association="Self.FK__tbl_Recep__IdLek__6477ECF3">
             <End Role="tbl_Leki" EntitySet="tbl_Leki" />
             <End Role="tbl_Recepta" EntitySet="tbl_Recepta" />
           </AssociationSet>
-          <AssociationSet Name="FK__tbl_Uzytk__IdRol__2E1BDC42" Association="Self.FK__tbl_Uzytk__IdRol__2E1BDC42">
+          <AssociationSet Name="FK__tbl_Uzytk__IdRol__656C112C" Association="Self.FK__tbl_Uzytk__IdRol__656C112C">
             <End Role="tbl_Rola" EntitySet="tbl_Rola" />
             <End Role="tbl_Uzytkownik" EntitySet="tbl_Uzytkownik" />
           </AssociationSet>
@@ -238,6 +282,18 @@
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Haslo" ColumnName="Haslo" />
                 <ScalarProperty Name="IdRola" ColumnName="IdRola" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="database_firewall_rules">
+            <EntityTypeMapping TypeName="MediMaxModel.database_firewall_rules">
+              <MappingFragment StoreEntitySet="database_firewall_rules">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="start_ip_address" ColumnName="start_ip_address" />
+                <ScalarProperty Name="end_ip_address" ColumnName="end_ip_address" />
+                <ScalarProperty Name="create_date" ColumnName="create_date" />
+                <ScalarProperty Name="modify_date" ColumnName="modify_date" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
