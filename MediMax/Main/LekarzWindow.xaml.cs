@@ -172,7 +172,15 @@ namespace Main
         {
             PeselTextBlock.Visibility = string.IsNullOrWhiteSpace(PeselTextBox.Text) ? Visibility.Visible : Visibility.Collapsed;
         }
+        private void LogoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
+            this.Close();
+        }
+
     }
+
 
     public class Lek
     {
@@ -181,4 +189,5 @@ namespace Main
         public string Typ { get; set; }
         public decimal Cena { get; set; }
     }
+
 }
