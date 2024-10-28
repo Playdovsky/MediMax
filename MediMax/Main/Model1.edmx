@@ -5,6 +5,34 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
       <Schema Namespace="MediMaxModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tbl_Leki">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nazwa" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Typ" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CzyNaRecepte" Type="bit" Nullable="false" />
+          <Property Name="Cena" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="tbl_Recepta">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdLeku" Type="int" Nullable="false" />
+          <Property Name="NumerRecepty" Type="int" Nullable="false" />
+          <Property Name="PESEL" Type="varchar" MaxLength="11" Nullable="false" />
+          <Property Name="CzyZrealizowano" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_ReceptaZalecenia">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NumerRecepty" Type="int" Nullable="false" />
+          <Property Name="Zalecenia" Type="varchar" MaxLength="255" />
+        </EntityType>
         <EntityType Name="tbl_Rola">
           <Key>
             <PropertyRef Name="Id" />
@@ -23,6 +51,18 @@
           <Property Name="Haslo" Type="char" MaxLength="128" Nullable="false" />
           <Property Name="IdRola" Type="int" Nullable="false" />
         </EntityType>
+        <Association Name="FK__tbl_Recep__IdLek__38996AB5">
+          <End Role="tbl_Leki" Type="Self.tbl_Leki" Multiplicity="1" />
+          <End Role="tbl_Recepta" Type="Self.tbl_Recepta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Leki">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tbl_Recepta">
+              <PropertyRef Name="IdLeku" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__tbl_Uzytk__IdRol__2E1BDC42">
           <End Role="tbl_Rola" Type="Self.tbl_Rola" Multiplicity="1" />
           <End Role="tbl_Uzytkownik" Type="Self.tbl_Uzytkownik" Multiplicity="*" />
@@ -36,8 +76,15 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="MediMaxModelStoreContainer">
+          <EntitySet Name="tbl_Leki" EntityType="Self.tbl_Leki" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Recepta" EntityType="Self.tbl_Recepta" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_ReceptaZalecenia" EntityType="Self.tbl_ReceptaZalecenia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_Rola" EntityType="Self.tbl_Rola" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_Uzytkownik" EntityType="Self.tbl_Uzytkownik" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__tbl_Recep__IdLek__38996AB5" Association="Self.FK__tbl_Recep__IdLek__38996AB5">
+            <End Role="tbl_Leki" EntitySet="tbl_Leki" />
+            <End Role="tbl_Recepta" EntitySet="tbl_Recepta" />
+          </AssociationSet>
           <AssociationSet Name="FK__tbl_Uzytk__IdRol__2E1BDC42" Association="Self.FK__tbl_Uzytk__IdRol__2E1BDC42">
             <End Role="tbl_Rola" EntitySet="tbl_Rola" />
             <End Role="tbl_Uzytkownik" EntitySet="tbl_Uzytkownik" />
@@ -48,6 +95,36 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MediMaxModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tbl_Leki">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nazwa" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Typ" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CzyNaRecepte" Type="Boolean" Nullable="false" />
+          <Property Name="Cena" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="tbl_Recepta" Relationship="Self.FK__tbl_Recep__IdLek__38996AB5" FromRole="tbl_Leki" ToRole="tbl_Recepta" />
+        </EntityType>
+        <EntityType Name="tbl_Recepta">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdLeku" Type="Int32" Nullable="false" />
+          <Property Name="NumerRecepty" Type="Int32" Nullable="false" />
+          <Property Name="PESEL" Type="String" MaxLength="11" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CzyZrealizowano" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="tbl_Leki" Relationship="Self.FK__tbl_Recep__IdLek__38996AB5" FromRole="tbl_Recepta" ToRole="tbl_Leki" />
+        </EntityType>
+        <EntityType Name="tbl_ReceptaZalecenia">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NumerRecepty" Type="Int32" Nullable="false" />
+          <Property Name="Zalecenia" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+        </EntityType>
         <EntityType Name="tbl_Rola">
           <Key>
             <PropertyRef Name="Id" />
@@ -68,6 +145,18 @@
           <Property Name="IdRola" Type="Int32" Nullable="false" />
           <NavigationProperty Name="tbl_Rola" Relationship="Self.FK__tbl_Uzytk__IdRol__2E1BDC42" FromRole="tbl_Uzytkownik" ToRole="tbl_Rola" />
         </EntityType>
+        <Association Name="FK__tbl_Recep__IdLek__38996AB5">
+          <End Role="tbl_Leki" Type="Self.tbl_Leki" Multiplicity="1" />
+          <End Role="tbl_Recepta" Type="Self.tbl_Recepta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Leki">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tbl_Recepta">
+              <PropertyRef Name="IdLeku" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__tbl_Uzytk__IdRol__2E1BDC42">
           <End Role="tbl_Rola" Type="Self.tbl_Rola" Multiplicity="1" />
           <End Role="tbl_Uzytkownik" Type="Self.tbl_Uzytkownik" Multiplicity="*" />
@@ -81,8 +170,15 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="MediMaxEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tbl_Leki" EntityType="Self.tbl_Leki" />
+          <EntitySet Name="tbl_Recepta" EntityType="Self.tbl_Recepta" />
+          <EntitySet Name="tbl_ReceptaZalecenia" EntityType="Self.tbl_ReceptaZalecenia" />
           <EntitySet Name="tbl_Rola" EntityType="Self.tbl_Rola" />
           <EntitySet Name="tbl_Uzytkownik" EntityType="Self.tbl_Uzytkownik" />
+          <AssociationSet Name="FK__tbl_Recep__IdLek__38996AB5" Association="Self.FK__tbl_Recep__IdLek__38996AB5">
+            <End Role="tbl_Leki" EntitySet="tbl_Leki" />
+            <End Role="tbl_Recepta" EntitySet="tbl_Recepta" />
+          </AssociationSet>
           <AssociationSet Name="FK__tbl_Uzytk__IdRol__2E1BDC42" Association="Self.FK__tbl_Uzytk__IdRol__2E1BDC42">
             <End Role="tbl_Rola" EntitySet="tbl_Rola" />
             <End Role="tbl_Uzytkownik" EntitySet="tbl_Uzytkownik" />
@@ -94,6 +190,37 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="MediMaxModelStoreContainer" CdmEntityContainer="MediMaxEntities">
+          <EntitySetMapping Name="tbl_Leki">
+            <EntityTypeMapping TypeName="MediMaxModel.tbl_Leki">
+              <MappingFragment StoreEntitySet="tbl_Leki">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nazwa" ColumnName="Nazwa" />
+                <ScalarProperty Name="Typ" ColumnName="Typ" />
+                <ScalarProperty Name="CzyNaRecepte" ColumnName="CzyNaRecepte" />
+                <ScalarProperty Name="Cena" ColumnName="Cena" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_Recepta">
+            <EntityTypeMapping TypeName="MediMaxModel.tbl_Recepta">
+              <MappingFragment StoreEntitySet="tbl_Recepta">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdLeku" ColumnName="IdLeku" />
+                <ScalarProperty Name="NumerRecepty" ColumnName="NumerRecepty" />
+                <ScalarProperty Name="PESEL" ColumnName="PESEL" />
+                <ScalarProperty Name="CzyZrealizowano" ColumnName="CzyZrealizowano" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_ReceptaZalecenia">
+            <EntityTypeMapping TypeName="MediMaxModel.tbl_ReceptaZalecenia">
+              <MappingFragment StoreEntitySet="tbl_ReceptaZalecenia">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="NumerRecepty" ColumnName="NumerRecepty" />
+                <ScalarProperty Name="Zalecenia" ColumnName="Zalecenia" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="tbl_Rola">
             <EntityTypeMapping TypeName="MediMaxModel.tbl_Rola">
               <MappingFragment StoreEntitySet="tbl_Rola">

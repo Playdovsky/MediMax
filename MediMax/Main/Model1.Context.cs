@@ -25,6 +25,9 @@ namespace Main
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<tbl_Leki> tbl_Leki { get; set; }
+        public virtual DbSet<tbl_Recepta> tbl_Recepta { get; set; }
+        public virtual DbSet<tbl_ReceptaZalecenia> tbl_ReceptaZalecenia { get; set; }
         public virtual DbSet<tbl_Rola> tbl_Rola { get; set; }
         public virtual DbSet<tbl_Uzytkownik> tbl_Uzytkownik { get; set; }
     }
