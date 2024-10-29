@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Main
 {
@@ -16,12 +18,11 @@ namespace Main
             InitializeComponent();
             LoadTypyLekow();
             LoadLeki();
-
         }
 
         private void LoadTypyLekow()
         {
-            using (var context = new MediMaxEntities()) 
+            using (var context = new MediMaxEntities())
             {
                 var typy = context.tbl_Leki.Select(l => l.Typ).Distinct().ToList();
 
@@ -42,7 +43,7 @@ namespace Main
 
         private void LoadLeki()
         {
-            using (var context = new MediMaxEntities()) 
+            using (var context = new MediMaxEntities())
             {
                 allLeki = context.tbl_Leki.Select(l => new Lek
                 {
@@ -70,14 +71,13 @@ namespace Main
         private void CreateRecepta_Click(object sender, RoutedEventArgs e)
         {
             string pesel = PeselTextBox.Text;
-            if (string.IsNullOrWhiteSpace(pesel) || pesel.Length != 11)
+            if (!IsPeselValid(pesel))
             {
                 MessageBox.Show("Wprowadź prawidłowy numer PESEL.");
                 return;
             }
 
             int numerRecepty = GenerateUniqueReceptaNumber(pesel);
-
             SaveRecepta(pesel, numerRecepty);
         }
 
@@ -91,7 +91,6 @@ namespace Main
             {
                 numerRecepty = random.Next(1000, 9999);
                 isUnique = CheckUniqueReceptaNumber(pesel, numerRecepty);
-
             } while (!isUnique);
 
             return numerRecepty;
@@ -111,7 +110,6 @@ namespace Main
             {
                 using (var context = new MediMaxEntities())
                 {
-                   
                     if (LekiListBox.SelectedItems.Count == 0)
                     {
                         MessageBox.Show("Wybierz przynajmniej jeden lek do recepty.");
@@ -130,32 +128,33 @@ namespace Main
                                 IdLeku = lek.Id,
                                 NumerRecepty = numerRecepty,
                                 PESEL = pesel,
-                                CzyZrealizowano = false 
+                                CzyZrealizowano = false
                             };
-
-                            Console.WriteLine($"Dodawanie recepty: PESEL={recepta.PESEL}, Numer={recepta.NumerRecepty}, IdLeku={recepta.IdLeku}");
-                            recepty.Add(recepta); 
+                            recepty.Add(recepta);
                         }
                     }
 
                     var zalecenie = new tbl_ReceptaZalecenia
                     {
                         NumerRecepty = numerRecepty,
-                        Zalecenia = ZaleceniaTextBox.Text 
+                        Zalecenia = ZaleceniaTextBox.Text
                     };
 
-                    Console.WriteLine($"Dodawanie zalecenia: Numer={zalecenie.NumerRecepty}, Zalecenia={zalecenie.Zalecenia}");
-
-                   
                     context.tbl_Recepta.AddRange(recepty);
-                    context.tbl_ReceptaZalecenia.Add(zalecenie); 
-
-                    Console.WriteLine("Zapisuję zmiany...");
-                    context.SaveChanges(); 
-                    Console.WriteLine("Zmiany zapisane.");
+                    context.tbl_ReceptaZalecenia.Add(zalecenie);
+                    context.SaveChanges();
                 }
 
-                MessageBox.Show("Recepta została wystawiona!");
+                MessageBox.Show($"Recepta została wystawiona! Numer recepty: {numerRecepty}");
+
+                PeselTextBox.Text = string.Empty;
+                ZaleceniaTextBox.Text = string.Empty;
+                LekiListBox.SelectedItems.Clear();
+
+                foreach (CheckBox checkBox in TypyLekowPanel.Items.OfType<CheckBox>())
+                {
+                    checkBox.IsChecked = false;
+                }
             }
             catch (DbUpdateException ex)
             {
@@ -168,19 +167,39 @@ namespace Main
         }
 
 
-        private void PeselTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void PeselTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            PeselTextBlock.Visibility = string.IsNullOrWhiteSpace(PeselTextBox.Text) ? Visibility.Visible : Visibility.Collapsed;
+            e.Handled = !IsTextNumeric(e.Text);
         }
+
+        private static bool IsTextNumeric(string text)
+        {
+            Regex regex = new Regex("[^0-9]+"); 
+            return !regex.IsMatch(text);
+        }
+
+        private bool IsPeselValid(string pesel)
+        {
+            if (pesel.Length != 11 || !long.TryParse(pesel, out _)) return false;
+
+            int[] weights = { 9, 7, 3, 1, 9, 7, 3, 1, 9, 7 };
+            int sum = 0;
+            for (int i = 0; i < 10; i++)
+            {
+                sum += (pesel[i] - '0') * weights[i];
+            }
+
+            int checksum = sum % 10;
+            return checksum == (pesel[10] - '0');
+        }
+
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
             MainWindow mainWindow = new MainWindow();
             mainWindow.Show();
             this.Close();
         }
-
     }
-
 
     public class Lek
     {
@@ -189,5 +208,4 @@ namespace Main
         public string Typ { get; set; }
         public decimal Cena { get; set; }
     }
-
 }
