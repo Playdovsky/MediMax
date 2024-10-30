@@ -28,7 +28,7 @@ namespace Main
 
             SendRegistrationEmail("MediMaxApteka@gmail.com", messageBody);
             MessageBox.Show("Formularz został wysłany!");
-            this.Close(); // Zamknij okno po wysłaniu
+            this.Close();
         }
 
         private void SendRegistrationEmail(string toEmail, string body)
