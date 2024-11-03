@@ -4,14 +4,14 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="MediMaxModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="MediMaxEntitiesNamespace.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="tbl_Leki">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Nazwa" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Typ" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Nazwa" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Typ" Type="varchar" MaxLength="50" />
           <Property Name="CzyNaRecepte" Type="bit" Nullable="false" />
           <Property Name="Cena" Type="decimal" Precision="10" Scale="2" />
         </EntityType>
@@ -31,7 +31,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="NumerRecepty" Type="int" Nullable="false" />
-          <Property Name="Zalecenia" Type="varchar" MaxLength="255" />
+          <Property Name="Zalecenia" Type="nvarchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="tbl_Rola">
           <Key>
@@ -47,12 +47,12 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Imie" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Nazwisko" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="Email" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Haslo" Type="char" MaxLength="128" Nullable="false" />
-          <Property Name="IdRola" Type="int" Nullable="false" />
+          <Property Name="IdRola" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'MediMax.sys.database_firewall_rules' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'medimaxapteka.sys.database_firewall_rules' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="database_firewall_rules">
           <Key>
             <PropertyRef Name="id" />
@@ -69,7 +69,7 @@ warning 6002: The table/view 'MediMax.sys.database_firewall_rules' does not have
           <Property Name="create_date" Type="datetime" Nullable="false" />
           <Property Name="modify_date" Type="datetime" Nullable="false" />
         </EntityType>
-        <Association Name="FK__tbl_Recep__IdLek__6477ECF3">
+        <Association Name="FK__tbl_Recep__IdLek__6383C8BA">
           <End Role="tbl_Leki" Type="Self.tbl_Leki" Multiplicity="1" />
           <End Role="tbl_Recepta" Type="Self.tbl_Recepta" Multiplicity="*" />
           <ReferentialConstraint>
@@ -81,8 +81,8 @@ warning 6002: The table/view 'MediMax.sys.database_firewall_rules' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__tbl_Uzytk__IdRol__656C112C">
-          <End Role="tbl_Rola" Type="Self.tbl_Rola" Multiplicity="1" />
+        <Association Name="FK__tbl_Uzytk__IdRol__5EBF139D">
+          <End Role="tbl_Rola" Type="Self.tbl_Rola" Multiplicity="0..1" />
           <End Role="tbl_Uzytkownik" Type="Self.tbl_Uzytkownik" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tbl_Rola">
@@ -93,7 +93,7 @@ warning 6002: The table/view 'MediMax.sys.database_firewall_rules' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="MediMaxModelStoreContainer">
+        <EntityContainer Name="MediMaxEntitiesNamespaceStoreContainer">
           <EntitySet Name="tbl_Leki" EntityType="Self.tbl_Leki" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_Recepta" EntityType="Self.tbl_Recepta" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_ReceptaZalecenia" EntityType="Self.tbl_ReceptaZalecenia" Schema="dbo" store:Type="Tables" />
@@ -109,29 +109,30 @@ warning 6002: The table/view 'MediMax.sys.database_firewall_rules' does not have
     [database_firewall_rules].[modify_date] AS [modify_date]
     FROM [sys].[database_firewall_rules] AS [database_firewall_rules]</DefiningQuery>
           </EntitySet>
-          <AssociationSet Name="FK__tbl_Recep__IdLek__6477ECF3" Association="Self.FK__tbl_Recep__IdLek__6477ECF3">
+          <AssociationSet Name="FK__tbl_Recep__IdLek__6383C8BA" Association="Self.FK__tbl_Recep__IdLek__6383C8BA">
             <End Role="tbl_Leki" EntitySet="tbl_Leki" />
             <End Role="tbl_Recepta" EntitySet="tbl_Recepta" />
           </AssociationSet>
-          <AssociationSet Name="FK__tbl_Uzytk__IdRol__656C112C" Association="Self.FK__tbl_Uzytk__IdRol__656C112C">
+          <AssociationSet Name="FK__tbl_Uzytk__IdRol__5EBF139D" Association="Self.FK__tbl_Uzytk__IdRol__5EBF139D">
             <End Role="tbl_Rola" EntitySet="tbl_Rola" />
             <End Role="tbl_Uzytkownik" EntitySet="tbl_Uzytkownik" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="MediMaxModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="MediMaxEntitiesNamespace" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="tbl_Leki">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Nazwa" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Typ" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Nazwa" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Typ" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="CzyNaRecepte" Type="Boolean" Nullable="false" />
           <Property Name="Cena" Type="Decimal" Precision="10" Scale="2" />
-          <NavigationProperty Name="tbl_Recepta" Relationship="Self.FK__tbl_Recep__IdLek__6477ECF3" FromRole="tbl_Leki" ToRole="tbl_Recepta" />
+          <NavigationProperty Name="tbl_Recepta" Relationship="Self.FK__tbl_Recep__IdLek__6383C8BA" FromRole="tbl_Leki" ToRole="tbl_Recepta" />
         </EntityType>
         <EntityType Name="tbl_Recepta">
           <Key>
@@ -142,7 +143,7 @@ warning 6002: The table/view 'MediMax.sys.database_firewall_rules' does not have
           <Property Name="NumerRecepty" Type="Int32" Nullable="false" />
           <Property Name="PESEL" Type="String" MaxLength="11" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="CzyZrealizowano" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="tbl_Leki" Relationship="Self.FK__tbl_Recep__IdLek__6477ECF3" FromRole="tbl_Recepta" ToRole="tbl_Leki" />
+          <NavigationProperty Name="tbl_Leki" Relationship="Self.FK__tbl_Recep__IdLek__6383C8BA" FromRole="tbl_Recepta" ToRole="tbl_Leki" />
         </EntityType>
         <EntityType Name="tbl_ReceptaZalecenia">
           <Key>
@@ -150,7 +151,7 @@ warning 6002: The table/view 'MediMax.sys.database_firewall_rules' does not have
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="NumerRecepty" Type="Int32" Nullable="false" />
-          <Property Name="Zalecenia" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Zalecenia" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="tbl_Rola">
           <Key>
@@ -158,7 +159,7 @@ warning 6002: The table/view 'MediMax.sys.database_firewall_rules' does not have
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nazwa" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="tbl_Uzytkownik" Relationship="Self.FK__tbl_Uzytk__IdRol__656C112C" FromRole="tbl_Rola" ToRole="tbl_Uzytkownik" />
+          <NavigationProperty Name="tbl_Uzytkownik" Relationship="Self.FK__tbl_Uzytk__IdRol__5EBF139D" FromRole="tbl_Rola" ToRole="tbl_Uzytkownik" />
         </EntityType>
         <EntityType Name="tbl_Uzytkownik">
           <Key>
@@ -167,10 +168,10 @@ warning 6002: The table/view 'MediMax.sys.database_firewall_rules' does not have
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Imie" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Nazwisko" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Email" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Haslo" Type="String" MaxLength="128" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="IdRola" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="tbl_Rola" Relationship="Self.FK__tbl_Uzytk__IdRol__656C112C" FromRole="tbl_Uzytkownik" ToRole="tbl_Rola" />
+          <Property Name="IdRola" Type="Int32" />
+          <NavigationProperty Name="tbl_Rola" Relationship="Self.FK__tbl_Uzytk__IdRol__5EBF139D" FromRole="tbl_Uzytkownik" ToRole="tbl_Rola" />
         </EntityType>
         <EntityType Name="database_firewall_rules">
           <Key>
@@ -188,7 +189,7 @@ warning 6002: The table/view 'MediMax.sys.database_firewall_rules' does not have
           <Property Name="create_date" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="modify_date" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
-        <Association Name="FK__tbl_Recep__IdLek__6477ECF3">
+        <Association Name="FK__tbl_Recep__IdLek__6383C8BA">
           <End Role="tbl_Leki" Type="Self.tbl_Leki" Multiplicity="1" />
           <End Role="tbl_Recepta" Type="Self.tbl_Recepta" Multiplicity="*" />
           <ReferentialConstraint>
@@ -200,8 +201,8 @@ warning 6002: The table/view 'MediMax.sys.database_firewall_rules' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__tbl_Uzytk__IdRol__656C112C">
-          <End Role="tbl_Rola" Type="Self.tbl_Rola" Multiplicity="1" />
+        <Association Name="FK__tbl_Uzytk__IdRol__5EBF139D">
+          <End Role="tbl_Rola" Type="Self.tbl_Rola" Multiplicity="0..1" />
           <End Role="tbl_Uzytkownik" Type="Self.tbl_Uzytkownik" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tbl_Rola">
@@ -219,11 +220,11 @@ warning 6002: The table/view 'MediMax.sys.database_firewall_rules' does not have
           <EntitySet Name="tbl_Rola" EntityType="Self.tbl_Rola" />
           <EntitySet Name="tbl_Uzytkownik" EntityType="Self.tbl_Uzytkownik" />
           <EntitySet Name="database_firewall_rules" EntityType="Self.database_firewall_rules" />
-          <AssociationSet Name="FK__tbl_Recep__IdLek__6477ECF3" Association="Self.FK__tbl_Recep__IdLek__6477ECF3">
+          <AssociationSet Name="FK__tbl_Recep__IdLek__6383C8BA" Association="Self.FK__tbl_Recep__IdLek__6383C8BA">
             <End Role="tbl_Leki" EntitySet="tbl_Leki" />
             <End Role="tbl_Recepta" EntitySet="tbl_Recepta" />
           </AssociationSet>
-          <AssociationSet Name="FK__tbl_Uzytk__IdRol__656C112C" Association="Self.FK__tbl_Uzytk__IdRol__656C112C">
+          <AssociationSet Name="FK__tbl_Uzytk__IdRol__5EBF139D" Association="Self.FK__tbl_Uzytk__IdRol__5EBF139D">
             <End Role="tbl_Rola" EntitySet="tbl_Rola" />
             <End Role="tbl_Uzytkownik" EntitySet="tbl_Uzytkownik" />
           </AssociationSet>
@@ -233,9 +234,9 @@ warning 6002: The table/view 'MediMax.sys.database_firewall_rules' does not have
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="MediMaxModelStoreContainer" CdmEntityContainer="MediMaxEntities">
+        <EntityContainerMapping StorageEntityContainer="MediMaxEntitiesNamespaceStoreContainer" CdmEntityContainer="MediMaxEntities">
           <EntitySetMapping Name="tbl_Leki">
-            <EntityTypeMapping TypeName="MediMaxModel.tbl_Leki">
+            <EntityTypeMapping TypeName="MediMaxEntitiesNamespace.tbl_Leki">
               <MappingFragment StoreEntitySet="tbl_Leki">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Nazwa" ColumnName="Nazwa" />
@@ -246,7 +247,7 @@ warning 6002: The table/view 'MediMax.sys.database_firewall_rules' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="tbl_Recepta">
-            <EntityTypeMapping TypeName="MediMaxModel.tbl_Recepta">
+            <EntityTypeMapping TypeName="MediMaxEntitiesNamespace.tbl_Recepta">
               <MappingFragment StoreEntitySet="tbl_Recepta">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="IdLeku" ColumnName="IdLeku" />
@@ -257,7 +258,7 @@ warning 6002: The table/view 'MediMax.sys.database_firewall_rules' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="tbl_ReceptaZalecenia">
-            <EntityTypeMapping TypeName="MediMaxModel.tbl_ReceptaZalecenia">
+            <EntityTypeMapping TypeName="MediMaxEntitiesNamespace.tbl_ReceptaZalecenia">
               <MappingFragment StoreEntitySet="tbl_ReceptaZalecenia">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="NumerRecepty" ColumnName="NumerRecepty" />
@@ -266,7 +267,7 @@ warning 6002: The table/view 'MediMax.sys.database_firewall_rules' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="tbl_Rola">
-            <EntityTypeMapping TypeName="MediMaxModel.tbl_Rola">
+            <EntityTypeMapping TypeName="MediMaxEntitiesNamespace.tbl_Rola">
               <MappingFragment StoreEntitySet="tbl_Rola">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Nazwa" ColumnName="Nazwa" />
@@ -274,7 +275,7 @@ warning 6002: The table/view 'MediMax.sys.database_firewall_rules' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="tbl_Uzytkownik">
-            <EntityTypeMapping TypeName="MediMaxModel.tbl_Uzytkownik">
+            <EntityTypeMapping TypeName="MediMaxEntitiesNamespace.tbl_Uzytkownik">
               <MappingFragment StoreEntitySet="tbl_Uzytkownik">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Imie" ColumnName="Imie" />
@@ -286,7 +287,7 @@ warning 6002: The table/view 'MediMax.sys.database_firewall_rules' does not have
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="database_firewall_rules">
-            <EntityTypeMapping TypeName="MediMaxModel.database_firewall_rules">
+            <EntityTypeMapping TypeName="MediMaxEntitiesNamespace.database_firewall_rules">
               <MappingFragment StoreEntitySet="database_firewall_rules">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="name" ColumnName="name" />

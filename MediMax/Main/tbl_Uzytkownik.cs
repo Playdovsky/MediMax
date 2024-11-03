@@ -19,7 +19,7 @@ namespace Main
         public string Nazwisko { get; set; }
         public string Email { get; set; }
         public string Haslo { get; set; }
-        public int IdRola { get; set; }
+        public Nullable<int> IdRola { get; set; }
     
         public virtual tbl_Rola tbl_Rola { get; set; }
     }
