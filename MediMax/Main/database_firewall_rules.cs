@@ -12,15 +12,13 @@ namespace Main
     using System;
     using System.Collections.Generic;
     
-    public partial class tbl_Uzytkownik
+    public partial class database_firewall_rules
     {
-        public int Id { get; set; }
-        public string Imie { get; set; }
-        public string Nazwisko { get; set; }
-        public string Email { get; set; }
-        public string Haslo { get; set; }
-        public Nullable<int> IdRola { get; set; }
-    
-        public virtual tbl_Rola tbl_Rola { get; set; }
+        public int id { get; set; }
+        public string name { get; set; }
+        public string start_ip_address { get; set; }
+        public string end_ip_address { get; set; }
+        public System.DateTime create_date { get; set; }
+        public System.DateTime modify_date { get; set; }
     }
 }

@@ -12,15 +12,12 @@ namespace Main
     using System;
     using System.Collections.Generic;
     
-    public partial class tbl_Uzytkownik
+    public partial class tbl_StanMagazynowy
     {
         public int Id { get; set; }
-        public string Imie { get; set; }
-        public string Nazwisko { get; set; }
-        public string Email { get; set; }
-        public string Haslo { get; set; }
-        public Nullable<int> IdRola { get; set; }
+        public int IdLeku { get; set; }
+        public int Ilosc { get; set; }
     
-        public virtual tbl_Rola tbl_Rola { get; set; }
+        public virtual tbl_Leki tbl_Leki { get; set; }
     }
 }

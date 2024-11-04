@@ -1,0 +1,384 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MediMaxEntitiesNamespace.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tbl_Leki">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nazwa" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Typ" Type="varchar" MaxLength="50" />
+          <Property Name="CzyNaRecepte" Type="bit" Nullable="false" />
+          <Property Name="Cena" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="tbl_Recepta">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdLeku" Type="int" Nullable="false" />
+          <Property Name="NumerRecepty" Type="int" Nullable="false" />
+          <Property Name="PESEL" Type="varchar" MaxLength="11" Nullable="false" />
+          <Property Name="CzyZrealizowano" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_ReceptaZalecenia">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NumerRecepty" Type="int" Nullable="false" />
+          <Property Name="Zalecenia" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="tbl_Rola">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nazwa" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_StanMagazynowy">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdLeku" Type="int" Nullable="false" />
+          <Property Name="Ilosc" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_Uzytkownik">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Imie" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Nazwisko" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Haslo" Type="char" MaxLength="128" Nullable="false" />
+          <Property Name="IdRola" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'medimaxapteka.sys.database_firewall_rules' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="database_firewall_rules">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="name" />
+            <PropertyRef Name="start_ip_address" />
+            <PropertyRef Name="end_ip_address" />
+            <PropertyRef Name="create_date" />
+            <PropertyRef Name="modify_date" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="start_ip_address" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="end_ip_address" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="create_date" Type="datetime" Nullable="false" />
+          <Property Name="modify_date" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__tbl_Recep__IdLek__6383C8BA">
+          <End Role="tbl_Leki" Type="Self.tbl_Leki" Multiplicity="1" />
+          <End Role="tbl_Recepta" Type="Self.tbl_Recepta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Leki">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tbl_Recepta">
+              <PropertyRef Name="IdLeku" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tbl_StanM__IdLek__6FE99F9F">
+          <End Role="tbl_Leki" Type="Self.tbl_Leki" Multiplicity="1" />
+          <End Role="tbl_StanMagazynowy" Type="Self.tbl_StanMagazynowy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Leki">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tbl_StanMagazynowy">
+              <PropertyRef Name="IdLeku" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tbl_Uzytk__IdRol__5EBF139D">
+          <End Role="tbl_Rola" Type="Self.tbl_Rola" Multiplicity="0..1" />
+          <End Role="tbl_Uzytkownik" Type="Self.tbl_Uzytkownik" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Rola">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tbl_Uzytkownik">
+              <PropertyRef Name="IdRola" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MediMaxEntitiesNamespaceStoreContainer">
+          <EntitySet Name="tbl_Leki" EntityType="Self.tbl_Leki" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Recepta" EntityType="Self.tbl_Recepta" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_ReceptaZalecenia" EntityType="Self.tbl_ReceptaZalecenia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Rola" EntityType="Self.tbl_Rola" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_StanMagazynowy" EntityType="Self.tbl_StanMagazynowy" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Uzytkownik" EntityType="Self.tbl_Uzytkownik" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="database_firewall_rules" EntityType="Self.database_firewall_rules" store:Type="Views" store:Schema="sys">
+            <DefiningQuery>SELECT 
+    [database_firewall_rules].[id] AS [id], 
+    [database_firewall_rules].[name] AS [name], 
+    [database_firewall_rules].[start_ip_address] AS [start_ip_address], 
+    [database_firewall_rules].[end_ip_address] AS [end_ip_address], 
+    [database_firewall_rules].[create_date] AS [create_date], 
+    [database_firewall_rules].[modify_date] AS [modify_date]
+    FROM [sys].[database_firewall_rules] AS [database_firewall_rules]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK__tbl_Recep__IdLek__6383C8BA" Association="Self.FK__tbl_Recep__IdLek__6383C8BA">
+            <End Role="tbl_Leki" EntitySet="tbl_Leki" />
+            <End Role="tbl_Recepta" EntitySet="tbl_Recepta" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tbl_StanM__IdLek__6FE99F9F" Association="Self.FK__tbl_StanM__IdLek__6FE99F9F">
+            <End Role="tbl_Leki" EntitySet="tbl_Leki" />
+            <End Role="tbl_StanMagazynowy" EntitySet="tbl_StanMagazynowy" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tbl_Uzytk__IdRol__5EBF139D" Association="Self.FK__tbl_Uzytk__IdRol__5EBF139D">
+            <End Role="tbl_Rola" EntitySet="tbl_Rola" />
+            <End Role="tbl_Uzytkownik" EntitySet="tbl_Uzytkownik" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MediMaxEntitiesNamespace" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tbl_Leki">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nazwa" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Typ" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CzyNaRecepte" Type="Boolean" Nullable="false" />
+          <Property Name="Cena" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="tbl_Recepta" Relationship="Self.FK__tbl_Recep__IdLek__6383C8BA" FromRole="tbl_Leki" ToRole="tbl_Recepta" />
+          <NavigationProperty Name="tbl_StanMagazynowy" Relationship="MediMaxEntitiesNamespace.FK__tbl_StanM__IdLek__6FE99F9F" FromRole="tbl_Leki" ToRole="tbl_StanMagazynowy" />
+        </EntityType>
+        <EntityType Name="tbl_Recepta">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdLeku" Type="Int32" Nullable="false" />
+          <Property Name="NumerRecepty" Type="Int32" Nullable="false" />
+          <Property Name="PESEL" Type="String" MaxLength="11" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CzyZrealizowano" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="tbl_Leki" Relationship="Self.FK__tbl_Recep__IdLek__6383C8BA" FromRole="tbl_Recepta" ToRole="tbl_Leki" />
+        </EntityType>
+        <EntityType Name="tbl_ReceptaZalecenia">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NumerRecepty" Type="Int32" Nullable="false" />
+          <Property Name="Zalecenia" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="tbl_Rola">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nazwa" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="tbl_Uzytkownik" Relationship="Self.FK__tbl_Uzytk__IdRol__5EBF139D" FromRole="tbl_Rola" ToRole="tbl_Uzytkownik" />
+        </EntityType>
+        <EntityType Name="tbl_Uzytkownik">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Imie" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Nazwisko" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Haslo" Type="String" MaxLength="128" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="IdRola" Type="Int32" />
+          <NavigationProperty Name="tbl_Rola" Relationship="Self.FK__tbl_Uzytk__IdRol__5EBF139D" FromRole="tbl_Uzytkownik" ToRole="tbl_Rola" />
+        </EntityType>
+        <EntityType Name="database_firewall_rules">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="name" />
+            <PropertyRef Name="start_ip_address" />
+            <PropertyRef Name="end_ip_address" />
+            <PropertyRef Name="create_date" />
+            <PropertyRef Name="modify_date" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="start_ip_address" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="end_ip_address" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="create_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="modify_date" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <Association Name="FK__tbl_Recep__IdLek__6383C8BA">
+          <End Role="tbl_Leki" Type="Self.tbl_Leki" Multiplicity="1" />
+          <End Role="tbl_Recepta" Type="Self.tbl_Recepta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Leki">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tbl_Recepta">
+              <PropertyRef Name="IdLeku" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tbl_Uzytk__IdRol__5EBF139D">
+          <End Role="tbl_Rola" Type="Self.tbl_Rola" Multiplicity="0..1" />
+          <End Role="tbl_Uzytkownik" Type="Self.tbl_Uzytkownik" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Rola">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tbl_Uzytkownik">
+              <PropertyRef Name="IdRola" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MediMaxEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tbl_Leki" EntityType="Self.tbl_Leki" />
+          <EntitySet Name="tbl_Recepta" EntityType="Self.tbl_Recepta" />
+          <EntitySet Name="tbl_ReceptaZalecenia" EntityType="Self.tbl_ReceptaZalecenia" />
+          <EntitySet Name="tbl_Rola" EntityType="Self.tbl_Rola" />
+          <EntitySet Name="tbl_Uzytkownik" EntityType="Self.tbl_Uzytkownik" />
+          <EntitySet Name="database_firewall_rules" EntityType="Self.database_firewall_rules" />
+          <AssociationSet Name="FK__tbl_Recep__IdLek__6383C8BA" Association="Self.FK__tbl_Recep__IdLek__6383C8BA">
+            <End Role="tbl_Leki" EntitySet="tbl_Leki" />
+            <End Role="tbl_Recepta" EntitySet="tbl_Recepta" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tbl_Uzytk__IdRol__5EBF139D" Association="Self.FK__tbl_Uzytk__IdRol__5EBF139D">
+            <End Role="tbl_Rola" EntitySet="tbl_Rola" />
+            <End Role="tbl_Uzytkownik" EntitySet="tbl_Uzytkownik" />
+          </AssociationSet>
+          <EntitySet Name="tbl_StanMagazynowy" EntityType="MediMaxEntitiesNamespace.tbl_StanMagazynowy" />
+          <AssociationSet Name="FK__tbl_StanM__IdLek__6FE99F9F" Association="MediMaxEntitiesNamespace.FK__tbl_StanM__IdLek__6FE99F9F">
+            <End Role="tbl_Leki" EntitySet="tbl_Leki" />
+            <End Role="tbl_StanMagazynowy" EntitySet="tbl_StanMagazynowy" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="tbl_StanMagazynowy">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdLeku" Type="Int32" Nullable="false" />
+          <Property Name="Ilosc" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tbl_Leki" Relationship="MediMaxEntitiesNamespace.FK__tbl_StanM__IdLek__6FE99F9F" FromRole="tbl_StanMagazynowy" ToRole="tbl_Leki" />
+        </EntityType>
+        <Association Name="FK__tbl_StanM__IdLek__6FE99F9F">
+          <End Type="MediMaxEntitiesNamespace.tbl_Leki" Role="tbl_Leki" Multiplicity="1" />
+          <End Type="MediMaxEntitiesNamespace.tbl_StanMagazynowy" Role="tbl_StanMagazynowy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Leki">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tbl_StanMagazynowy">
+              <PropertyRef Name="IdLeku" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MediMaxEntitiesNamespaceStoreContainer" CdmEntityContainer="MediMaxEntities">
+          <EntitySetMapping Name="tbl_Leki">
+            <EntityTypeMapping TypeName="MediMaxEntitiesNamespace.tbl_Leki">
+              <MappingFragment StoreEntitySet="tbl_Leki">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nazwa" ColumnName="Nazwa" />
+                <ScalarProperty Name="Typ" ColumnName="Typ" />
+                <ScalarProperty Name="CzyNaRecepte" ColumnName="CzyNaRecepte" />
+                <ScalarProperty Name="Cena" ColumnName="Cena" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_Recepta">
+            <EntityTypeMapping TypeName="MediMaxEntitiesNamespace.tbl_Recepta">
+              <MappingFragment StoreEntitySet="tbl_Recepta">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdLeku" ColumnName="IdLeku" />
+                <ScalarProperty Name="NumerRecepty" ColumnName="NumerRecepty" />
+                <ScalarProperty Name="PESEL" ColumnName="PESEL" />
+                <ScalarProperty Name="CzyZrealizowano" ColumnName="CzyZrealizowano" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_ReceptaZalecenia">
+            <EntityTypeMapping TypeName="MediMaxEntitiesNamespace.tbl_ReceptaZalecenia">
+              <MappingFragment StoreEntitySet="tbl_ReceptaZalecenia">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="NumerRecepty" ColumnName="NumerRecepty" />
+                <ScalarProperty Name="Zalecenia" ColumnName="Zalecenia" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_Rola">
+            <EntityTypeMapping TypeName="MediMaxEntitiesNamespace.tbl_Rola">
+              <MappingFragment StoreEntitySet="tbl_Rola">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nazwa" ColumnName="Nazwa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_Uzytkownik">
+            <EntityTypeMapping TypeName="MediMaxEntitiesNamespace.tbl_Uzytkownik">
+              <MappingFragment StoreEntitySet="tbl_Uzytkownik">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Imie" ColumnName="Imie" />
+                <ScalarProperty Name="Nazwisko" ColumnName="Nazwisko" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Haslo" ColumnName="Haslo" />
+                <ScalarProperty Name="IdRola" ColumnName="IdRola" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="database_firewall_rules">
+            <EntityTypeMapping TypeName="MediMaxEntitiesNamespace.database_firewall_rules">
+              <MappingFragment StoreEntitySet="database_firewall_rules">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="start_ip_address" ColumnName="start_ip_address" />
+                <ScalarProperty Name="end_ip_address" ColumnName="end_ip_address" />
+                <ScalarProperty Name="create_date" ColumnName="create_date" />
+                <ScalarProperty Name="modify_date" ColumnName="modify_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_StanMagazynowy">
+            <EntityTypeMapping TypeName="MediMaxEntitiesNamespace.tbl_StanMagazynowy">
+              <MappingFragment StoreEntitySet="tbl_StanMagazynowy">
+                <ScalarProperty Name="Ilosc" ColumnName="Ilosc" />
+                <ScalarProperty Name="IdLeku" ColumnName="IdLeku" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
