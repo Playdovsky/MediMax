@@ -31,5 +31,6 @@ namespace Main
         public virtual DbSet<tbl_Rola> tbl_Rola { get; set; }
         public virtual DbSet<tbl_Uzytkownik> tbl_Uzytkownik { get; set; }
         public virtual DbSet<database_firewall_rules> database_firewall_rules { get; set; }
+        public virtual DbSet<tbl_StanMagazynowy> tbl_StanMagazynowy { get; set; }
     }
 }

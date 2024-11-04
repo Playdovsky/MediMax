@@ -18,6 +18,7 @@ namespace Main
         public tbl_Leki()
         {
             this.tbl_Recepta = new HashSet<tbl_Recepta>();
+            this.tbl_StanMagazynowy = new HashSet<tbl_StanMagazynowy>();
         }
     
         public int Id { get; set; }
@@ -28,5 +29,7 @@ namespace Main
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tbl_Recepta> tbl_Recepta { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tbl_StanMagazynowy> tbl_StanMagazynowy { get; set; }
     }
 }
