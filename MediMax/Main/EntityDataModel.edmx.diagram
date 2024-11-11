@@ -15,6 +15,10 @@
         <AssociationConnector Association="MediMaxEntitiesNamespace.FK__tbl_Uzytk__IdRol__5EBF139D" ManuallyRouted="false" />
         <EntityTypeShape EntityType="MediMaxEntitiesNamespace.tbl_StanMagazynowy" Width="2.375" PointX="3" PointY="8.125" />
         <AssociationConnector Association="MediMaxEntitiesNamespace.FK__tbl_StanM__IdLek__6FE99F9F" />
+        <EntityTypeShape EntityType="MediMaxEntitiesNamespace.tbl_Zamowienia" Width="1.5" PointX="3" PointY="10.875" />
+        <EntityTypeShape EntityType="MediMaxEntitiesNamespace.tbl_ZapotrzebowanieLeku" Width="1.5" PointX="3" PointY="13.875" />
+        <AssociationConnector Association="MediMaxEntitiesNamespace.FK__tbl_Zamow__IdLek__06CD04F7" />
+        <AssociationConnector Association="MediMaxEntitiesNamespace.FK__tbl_Zapot__IdLek__03F0984C" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

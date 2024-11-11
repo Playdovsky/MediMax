@@ -79,6 +79,8 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
+                <Button Name="OrderButton" Content="Zamów" Click="OrderButton_Click"/>
+
 
             </StackPanel>
         </Border>

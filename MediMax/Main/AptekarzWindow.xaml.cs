@@ -69,7 +69,7 @@ namespace Main
 
             using (var context = new MediMaxEntities())
             {
-                bool allMedicinesRealized = true; 
+                bool allMedicinesRealized = true;
 
                 foreach (LekDoRealizacji lek in LekiListBox.SelectedItems)
                 {
@@ -79,6 +79,7 @@ namespace Main
 
                     if (stanMagazynowyDb != null && receptaDb != null)
                     {
+                        // Sprawdzamy stan magazynowy
                         if (stanMagazynowyDb.Ilosc > 0)
                         {
                             stanMagazynowyDb.Ilosc -= 1;
@@ -86,8 +87,11 @@ namespace Main
                         }
                         else
                         {
-                            MessageBox.Show($"Brak w magazynie: {lek.Nazwa}. Zamówienie leku wymagane.");
-                            allMedicinesRealized = false; 
+                            // Wyświetlamy okno do zamówienia leku, w którym użytkownik wpisuje e-mail
+                            SingleOrderWindow orderWindow = new SingleOrderWindow(lek.Id, lek.Nazwa);
+                            orderWindow.ShowDialog();
+
+                            allMedicinesRealized = false;
                         }
                     }
                 }
@@ -100,7 +104,7 @@ namespace Main
                 }
                 else
                 {
-                    MessageBox.Show("Niektóre leki nie mogły być zrealizowane z powodu braku w magazynie.");
+                    MessageBox.Show("Niektóre leki nie mogły być zrealizowane z powodu braku w magazynie. Zostały zamówione.");
                 }
 
                 PeselTextBox.Text = string.Empty;
@@ -109,8 +113,6 @@ namespace Main
                 lekiDoRealizacji.Clear();
             }
         }
-
-
 
         private bool IsPeselValid(string pesel)
         {
@@ -136,6 +138,12 @@ namespace Main
             mainWindow.Show();
             this.Close();
         }
+        private void OrderButton_Click(object sender, RoutedEventArgs e)
+        {
+            LowStockOrderWindow orderWindow = new LowStockOrderWindow();
+            orderWindow.ShowDialog();
+        }
+
     }
 
 
