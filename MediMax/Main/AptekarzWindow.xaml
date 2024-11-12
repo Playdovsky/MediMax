@@ -14,11 +14,11 @@
                            HorizontalAlignment="Center" Margin="0,0,0,20"/>
 
                 <TextBlock Text="Wprowadź PESEL" Foreground="Gray" Margin="0,0,0,5"/>
-                <TextBox x:Name="PeselTextBox" Width="250" Height="30" Margin="0,0,0,10" MaxLength="11" 
+                <TextBox x:Name="PeselTextBox" Width="250" Height="30" Margin="0,0,0,0" MaxLength="11" 
                          PreviewTextInput="PeselTextBox_PreviewTextInput"/>
 
                 <TextBlock Text="Wprowadź Numer Recepty" Foreground="Gray" Margin="0,10,0,5"/>
-                <TextBox x:Name="NumerReceptyTextBox" Width="250" Height="30" Margin="0,0,0,10"/>
+                <TextBox x:Name="NumerReceptyTextBox" Width="250" Height="30" Margin="0,0,0,0"/>
 
                 <Button Content="Wyszukaj" Width="150" Height="40" Background="#FF6347" Foreground="White" 
                         FontSize="16" Click="WyszukajRecepta_Click" HorizontalAlignment="Center" Margin="0,10,0,20">
@@ -79,7 +79,21 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-                <Button Name="OrderButton" Content="Zamów" Click="OrderButton_Click"/>
+                <Button Content="Zamów" Width="200" Height="50" Foreground="White" FontSize="18"
+        Background="#FF6347" Click="OrderButton_Click" HorizontalAlignment="Center" Margin="0,10,0,0">
+    <Button.Template>
+        <ControlTemplate TargetType="{x:Type Button}">
+            <Border x:Name="border" CornerRadius="10" Background="{TemplateBinding Background}">
+                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="border" Property="Background" Value="#FF4500"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </Button.Template>
+</Button>
 
 
             </StackPanel>

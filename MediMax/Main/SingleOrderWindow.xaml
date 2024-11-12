@@ -5,25 +5,42 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Main"
         mc:Ignorable="d"
-        Title="SingleOrderWindow" Height="450" Width="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+        Title="Zamawanie Leków" Height="600" Width="900"
+        Background="#F0F8FF" WindowStyle="SingleBorderWindow">
+    <Grid Margin="20">
+        <Border Background="White" CornerRadius="15" Padding="20">
+            <Border.Effect>
+                <DropShadowEffect Color="Gray" BlurRadius="10" ShadowDepth="5"/>
+            </Border.Effect>
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Zamów Lek" FontSize="48" FontWeight="Bold" Foreground="#003366"
+                           HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                    <TextBlock Text="Zamów Ilość:" FontSize="16" Foreground="Gray" VerticalAlignment="Center"/>
+                    <TextBox Name="OrderQuantityTextBox" Width="200" Height="30" Margin="20,0,0,0"/>
+                </StackPanel>
 
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                    <TextBlock Text="E-mail klienta:" FontSize="16" Foreground="Gray" VerticalAlignment="Center"/>
+                    <TextBox Name="CustomerEmailTextBox" Width="200" Height="30" Margin="20,0,0,0"/>
+                </StackPanel>
+                <Button Content="Zamów" Width="200" Height="50" Foreground="White" FontSize="18"
+                        Background="#FF6347" Click="ConfirmOrderButton_Click" HorizontalAlignment="Center" Margin="0,20,0,0">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="border" CornerRadius="10" Background="{TemplateBinding Background}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#FF4500"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
 
-
-        <TextBlock Text="Zamów Ilość:" Grid.Row="1"/>
-        <TextBox Name="OrderQuantityTextBox" Grid.Row="1" Margin="120,0,0,0"/>
-
-
-        <TextBlock Text="E-mail klienta:" Grid.Row="2"/>
-        <TextBox Name="CustomerEmailTextBox" Grid.Row="2" Margin="120,0,0,0"/>
-
-
-        <Button Content="Zamów" Grid.Row="3" Click="ConfirmOrderButton_Click" Margin="0,20,0,0"/>
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>
