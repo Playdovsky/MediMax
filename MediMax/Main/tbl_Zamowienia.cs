@@ -19,6 +19,7 @@ namespace Main
         public int Ilosc { get; set; }
         public System.DateTime DataZamowienia { get; set; }
         public string Kontakt { get; set; }
+        public Nullable<System.DateTime> DataWaznosci { get; set; }
     
         public virtual tbl_Leki tbl_Leki { get; set; }
     }

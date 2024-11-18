@@ -87,6 +87,9 @@
     <Compile Include="AptekarzWindow.xaml.cs">
       <DependentUpon>AptekarzWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ConfirmationDialog.xaml.cs">
+      <DependentUpon>ConfirmationDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="database_firewall_rules.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
@@ -142,6 +145,10 @@
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
     <Page Include="AptekarzWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ConfirmationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

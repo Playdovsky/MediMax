@@ -28,6 +28,7 @@ namespace Main
         public string Typ { get; set; }
         public bool CzyNaRecepte { get; set; }
         public Nullable<decimal> Cena { get; set; }
+        public int IloscWOpakowaniu { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tbl_Recepta> tbl_Recepta { get; set; }

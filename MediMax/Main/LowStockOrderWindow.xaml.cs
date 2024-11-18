@@ -51,7 +51,17 @@ namespace Main
 
         private void OrderButton_Click(object sender, RoutedEventArgs e)
         {
-            bool isAnyQuantityEntered = false; 
+            bool isAnyQuantityEntered = false;
+            bool isAnyOrderConfirmed = false;
+
+            var confirmationDialog = new ConfirmationDialog();
+            confirmationDialog.ShowDialog();
+
+            if (!confirmationDialog.IsConfirmed)
+            {
+                MessageBox.Show("Zamówienie zostało anulowane.");
+                return; 
+            }
 
             foreach (var child in MedicinesStackPanel.Children.OfType<StackPanel>())
             {
@@ -61,28 +71,27 @@ namespace Main
                 {
                     isAnyQuantityEntered = true;
 
-                    var medicineName = child.Children.OfType<TextBlock>().FirstOrDefault()?.Text;
                     var selectedMedicine = (tbl_Leki)quantityTextBox.Tag;
 
-                    PlaceOrder(selectedMedicine.Id, quantity, "supplier@example.com");
+                    PlaceOrder(selectedMedicine.Id, quantity,"");
+                    isAnyOrderConfirmed = true;
                 }
             }
 
             if (!isAnyQuantityEntered)
             {
-                
                 MessageBox.Show("Proszę wpisać odpowiednią liczbę leków do zamówienia.");
+            }
+            else if (isAnyOrderConfirmed)
+            {
+                MessageBox.Show("Zamówienia zostały złożone.");
+                this.Close();
             }
             else
             {
-
-                MessageBox.Show("Zamówienia zostały złożone.");
-                this.Close();  
+                MessageBox.Show("Żadne zamówienie nie zostało złożone.");
             }
         }
-
-
-
 
         private int CalculateOrderQuantity(tbl_Leki item, decimal currentStock)
         {
@@ -130,6 +139,10 @@ namespace Main
             }
         }
 
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close(); 
+        }
 
         public List<tbl_Leki> GetLowStockMedicines()
         {

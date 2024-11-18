@@ -14,6 +14,7 @@
           <Property Name="Typ" Type="varchar" MaxLength="50" />
           <Property Name="CzyNaRecepte" Type="bit" Nullable="false" />
           <Property Name="Cena" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="IloscWOpakowaniu" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="tbl_Recepta">
           <Key>
@@ -68,6 +69,7 @@
           <Property Name="Ilosc" Type="int" Nullable="false" />
           <Property Name="DataZamowienia" Type="date" Nullable="false" />
           <Property Name="Kontakt" Type="varchar" MaxLength="30" />
+          <Property Name="DataWaznosci" Type="date" />
         </EntityType>
         <EntityType Name="tbl_ZapotrzebowanieLeku">
           <Key>
@@ -212,6 +214,7 @@ warning 6002: The table/view 'medimaxapteka.sys.database_firewall_rules' does no
           <NavigationProperty Name="tbl_StanMagazynowy" Relationship="MediMaxEntitiesNamespace.FK__tbl_StanM__IdLek__6FE99F9F" FromRole="tbl_Leki" ToRole="tbl_StanMagazynowy" />
           <NavigationProperty Name="tbl_Zamowienia" Relationship="MediMaxEntitiesNamespace.FK__tbl_Zamow__IdLek__06CD04F7" FromRole="tbl_Leki" ToRole="tbl_Zamowienia" />
           <NavigationProperty Name="tbl_ZapotrzebowanieLeku" Relationship="MediMaxEntitiesNamespace.FK__tbl_Zapot__IdLek__03F0984C" FromRole="tbl_Leki" ToRole="tbl_ZapotrzebowanieLeku" />
+          <Property Name="IloscWOpakowaniu" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="tbl_Recepta">
           <Key>
@@ -354,6 +357,7 @@ warning 6002: The table/view 'medimaxapteka.sys.database_firewall_rules' does no
           <Property Name="DataZamowienia" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Kontakt" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="tbl_Leki" Relationship="MediMaxEntitiesNamespace.FK__tbl_Zamow__IdLek__06CD04F7" FromRole="tbl_Zamowienia" ToRole="tbl_Leki" />
+          <Property Name="DataWaznosci" Type="DateTime" Precision="0" />
         </EntityType>
         <EntityType Name="tbl_ZapotrzebowanieLeku">
           <Key>
@@ -397,6 +401,7 @@ warning 6002: The table/view 'medimaxapteka.sys.database_firewall_rules' does no
           <EntitySetMapping Name="tbl_Leki">
             <EntityTypeMapping TypeName="MediMaxEntitiesNamespace.tbl_Leki">
               <MappingFragment StoreEntitySet="tbl_Leki">
+                <ScalarProperty Name="IloscWOpakowaniu" ColumnName="IloscWOpakowaniu" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Nazwa" ColumnName="Nazwa" />
                 <ScalarProperty Name="Typ" ColumnName="Typ" />
@@ -469,6 +474,7 @@ warning 6002: The table/view 'medimaxapteka.sys.database_firewall_rules' does no
           <EntitySetMapping Name="tbl_Zamowienia">
             <EntityTypeMapping TypeName="MediMaxEntitiesNamespace.tbl_Zamowienia">
               <MappingFragment StoreEntitySet="tbl_Zamowienia">
+                <ScalarProperty Name="DataWaznosci" ColumnName="DataWaznosci" />
                 <ScalarProperty Name="Kontakt" ColumnName="Kontakt" />
                 <ScalarProperty Name="DataZamowienia" ColumnName="DataZamowienia" />
                 <ScalarProperty Name="Ilosc" ColumnName="Ilosc" />
