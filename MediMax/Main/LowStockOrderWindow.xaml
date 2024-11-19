@@ -1,11 +1,7 @@
 ﻿<Window x:Class="Main.LowStockOrderWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Main"
-        mc:Ignorable="d"
-        Title="Zamawianie Leków" Height="450" Width="800"
+        Title="Zamawianie Leków" Height="550" Width="800"
         Background="#F0F8FF" WindowStyle="None">
     <Grid Margin="20">
         <Border Background="White" CornerRadius="15" Padding="20">
@@ -13,45 +9,42 @@
                 <DropShadowEffect Color="Gray" BlurRadius="10" ShadowDepth="5"/>
             </Border.Effect>
             <StackPanel Orientation="Vertical">
-
-                <TextBlock Text="Zamówienie Leków" FontSize="48" FontWeight="Bold" Foreground="#003366" 
+                <TextBlock Text="Zamówienie Leków" FontSize="36" FontWeight="Bold" Foreground="#003366" 
                            HorizontalAlignment="Center" Margin="0,0,0,20"/>
 
-                <StackPanel Name="MedicinesStackPanel" Margin="0,10,0,20">
-                </StackPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="250">
+                    <ItemsControl Name="MedicinesList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="10" 
+                                        Margin="5" Padding="10" Background="#F8F8F8">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="{Binding Nazwa}" FontSize="16" FontWeight="Bold" Margin="0,0,0,5"/>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                            <TextBlock Text="Stan magazynowy: " />
+                                            <TextBlock Text="{Binding StanMagazynowy}" />
+                                        </StackPanel>
+
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                            <TextBlock Text="Zapotrzebowanie: " />
+                                            <TextBlock Text="{Binding Zapotrzebowanie}" />
+                                        </StackPanel>
+
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <TextBlock Text="Ilość do zamówienia:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                            <TextBox Text="{Binding IloscDoZamowienia, Mode=TwoWay}" Width="100" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
 
                 <Button Content="Zamów" Width="200" Height="50" Foreground="White" FontSize="18"
-                        Background="#FF6347" Click="OrderButton_Click" HorizontalAlignment="Center" Margin="0,10,0,20">
-                    <Button.Template>
-                        <ControlTemplate TargetType="{x:Type Button}">
-                            <Border x:Name="border" CornerRadius="10" Background="{TemplateBinding Background}">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="#FF4500"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-
+                        Background="#FF6347" Click="OrderButton_Click" HorizontalAlignment="Center" Margin="0,10,0,20"/>
                 <Button Content="Anuluj" Width="200" Height="50" Foreground="White" FontSize="18"
-                        Background="#808080" Click="CancelButton_Click" HorizontalAlignment="Center" Margin="0,10,0,0">
-                    <Button.Template>
-                        <ControlTemplate TargetType="{x:Type Button}">
-                            <Border x:Name="border" CornerRadius="10" Background="{TemplateBinding Background}">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="#696969"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-
+                        Background="#808080" Click="CancelButton_Click" HorizontalAlignment="Center" Margin="0,10,0,0"/>
             </StackPanel>
         </Border>
     </Grid>

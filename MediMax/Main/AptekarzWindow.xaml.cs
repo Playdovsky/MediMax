@@ -129,7 +129,6 @@ namespace Main
 
                     if (stanMagazynowyDb != null && receptaDb != null)
                     {
-                        // Sprawdzamy stan magazynowy
                         if (stanMagazynowyDb.Ilosc > 0)
                         {
                             stanMagazynowyDb.Ilosc -= 1;
@@ -137,7 +136,7 @@ namespace Main
                         }
                         else
                         {
-                            // Wyświetlamy okno do zamówienia leku, w którym użytkownik wpisuje e-mail
+                          
                             SingleOrderWindow orderWindow = new SingleOrderWindow(lek.Id);
                             orderWindow.ShowDialog();
 

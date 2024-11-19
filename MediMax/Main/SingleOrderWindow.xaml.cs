@@ -64,7 +64,7 @@ namespace Main
                 var stock = context.tbl_StanMagazynowy.FirstOrDefault(sm => sm.IdLeku == lekId);
                 if (stock != null)
                 {
-                    stock.Ilosc += quantity; // Dodajemy zamówioną ilość do magazynu
+                    stock.Ilosc += quantity;
                     context.SaveChanges();
                 }
                 else
