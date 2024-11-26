@@ -26,9 +26,9 @@
                 <TextBlock Text="Zalecenia:" FontWeight="Bold" FontSize="16" Foreground="#003366" Margin="0,10,0,5"/>
                 <TextBox x:Name="ZaleceniaTextBox" Width="400" Height="100" TextWrapping="Wrap" Margin="0,0,0,10"/>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
-                    <Button Content="Stwórz Receptę" Width="150" Height="50" Foreground="White" FontSize="18" 
-                            Background="#FF6347" Click="CreateRecepta_Click" Margin="0,0,10,0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,30,0,0">
+                    <Button Content="Stwórz Receptę" Width="150" Foreground="White" FontSize="18" 
+            Background="#FF6347" Click="CreateRecepta_Click" Margin="10">
                         <Button.Template>
                             <ControlTemplate TargetType="{x:Type Button}">
                                 <Border x:Name="border" CornerRadius="10" Background="{TemplateBinding Background}">
@@ -42,8 +42,8 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
-                    <Button Content="Wyloguj" Width="150" Height="50" Foreground="White" FontSize="18" 
-                            Background="#FF6347" Click="LogoutButton_Click">
+                    <Button Content="Wyloguj" Width="150" Foreground="White" FontSize="18" 
+            Background="#FF6347" Click="LogoutButton_Click" Margin="10">
                         <Button.Template>
                             <ControlTemplate TargetType="{x:Type Button}">
                                 <Border x:Name="border" CornerRadius="10" Background="{TemplateBinding Background}">
@@ -52,6 +52,21 @@
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter TargetName="border" Property="Background" Value="#FF4500"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <Button Content="Podgląd Recept" Width="200" Foreground="White" FontSize="18"
+            Background="#4682B4" Click="PodgladReceptButton_Click" HorizontalAlignment="Center" Margin="10">
+                        <Button.Template>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border x:Name="border" CornerRadius="10" Background="{TemplateBinding Background}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="border" Property="Background" Value="#4169E1"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>

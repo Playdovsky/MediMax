@@ -199,6 +199,15 @@ namespace Main
             mainWindow.Show();
             this.Close();
         }
+        private void PodgladReceptButton_Click(object sender, RoutedEventArgs e)
+        {
+            PodgladReceptWindow podgladWindow = new PodgladReceptWindow();
+            this.Hide();
+            podgladWindow.ShowDialog();
+            this.Show();
+        }
+
+
     }
 
     public class Lek

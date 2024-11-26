@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
+
 namespace Main
 {
     public partial class AptekarzWindow : Window
@@ -13,9 +14,58 @@ namespace Main
         public AptekarzWindow()
         {
             InitializeComponent();
+            RemoveExpiredMedicines();
+            CheckLowStockMedicines();
         }
 
-        private void WyszukajRecepta_Click(object sender, RoutedEventArgs e)
+        private void CheckLowStockMedicines()
+        {
+            var lowStockMedicines = GetLowStockMedicines();
+            if (lowStockMedicines.Any())
+            {
+                MessageBox.Show("Brakuje niektórych leków, naciśnij zamów po więcej szczegółów");
+            }
+        }
+          public List<tbl_Leki> GetLowStockMedicines()
+    {
+        using (var context = new MediMaxEntities())
+        {
+            var lowStockMedicines = context.tbl_Leki
+                .Where(lek =>
+                    lek.tbl_StanMagazynowy.Any(sm => sm.Ilosc < 0.2 * lek.tbl_ZapotrzebowanieLeku.Sum(z => z.IloscPrzepisanych)))
+                .ToList();
+
+            return lowStockMedicines;
+        }
+    }
+        private void RemoveExpiredMedicines()
+        {
+            using (var context = new MediMaxEntities())
+            {
+                var expiredMedicines = context.tbl_Zamowienia
+                    .Where(z => z.DataWaznosci < DateTime.Now)
+                    .ToList();
+
+                if (expiredMedicines.Any()) 
+                {
+                    foreach (var order in expiredMedicines)
+                    {
+                        var stock = context.tbl_StanMagazynowy.FirstOrDefault(sm => sm.IdLeku == order.IdLeku);
+                        if (stock != null)
+                        {
+                            stock.Ilosc -= order.Ilosc;
+                        }
+
+                        context.tbl_Zamowienia.Remove(order);
+                    }
+
+                    context.SaveChanges();
+
+                    MessageBox.Show("Przeterminowane leki zostały usunięte z magazynu");
+                }
+            }
+        }
+            private void WyszukajRecepta_Click(object sender, RoutedEventArgs e)
         {
             string pesel = PeselTextBox.Text;
             int numerRecepty;
@@ -69,7 +119,7 @@ namespace Main
 
             using (var context = new MediMaxEntities())
             {
-                bool allMedicinesRealized = true; 
+                bool allMedicinesRealized = true;
 
                 foreach (LekDoRealizacji lek in LekiListBox.SelectedItems)
                 {
@@ -86,8 +136,11 @@ namespace Main
                         }
                         else
                         {
-                            MessageBox.Show($"Brak w magazynie: {lek.Nazwa}. Zamówienie leku wymagane.");
-                            allMedicinesRealized = false; 
+                          
+                            SingleOrderWindow orderWindow = new SingleOrderWindow(lek.Id);
+                            orderWindow.ShowDialog();
+
+                            allMedicinesRealized = false;
                         }
                     }
                 }
@@ -100,7 +153,7 @@ namespace Main
                 }
                 else
                 {
-                    MessageBox.Show("Niektóre leki nie mogły być zrealizowane z powodu braku w magazynie.");
+                    MessageBox.Show("Niektóre leki nie mogły być zrealizowane z powodu braku w magazynie. Zostały zamówione.");
                 }
 
                 PeselTextBox.Text = string.Empty;
@@ -109,8 +162,6 @@ namespace Main
                 lekiDoRealizacji.Clear();
             }
         }
-
-
 
         private bool IsPeselValid(string pesel)
         {
@@ -136,6 +187,12 @@ namespace Main
             mainWindow.Show();
             this.Close();
         }
+        private void OrderButton_Click(object sender, RoutedEventArgs e)
+        {
+            LowStockOrderWindow orderWindow = new LowStockOrderWindow();
+            orderWindow.ShowDialog();
+        }
+
     }
 
 
