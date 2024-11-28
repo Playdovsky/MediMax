@@ -28,7 +28,6 @@ namespace Main
         {
             using (var context = new MediMaxEntities())
             {
-                // Pobieramy podstawowe dane
                 var recepty = from r in context.tbl_Recepta
                               join l in context.tbl_Leki on r.IdLeku equals l.Id
                               where r.PESEL == pesel
@@ -37,25 +36,21 @@ namespace Main
                                   NumerRecepty = r.NumerRecepty,
                                   LekNazwa = l.Nazwa,
                                   CzyZrealizowano = r.CzyZrealizowano ? "Zrealizowana" : "Nie zrealizowana",
-                                  CzyZrealizowanoBool = r.CzyZrealizowano // Dodatkowe pole pomocnicze do filtrowania
+                                  CzyZrealizowanoBool = r.CzyZrealizowano
                               };
 
-                // Filtr numeru recepty
                 if (int.TryParse(NumerReceptyTextBox.Text, out int numerRecepty))
                 {
                     recepty = recepty.Where(r => r.NumerRecepty == numerRecepty);
                 }
 
-                // Filtr niezrealizowanych recept
                 if (NiezrealizowaneCheckBox.IsChecked == true)
                 {
                     recepty = recepty.Where(r => r.CzyZrealizowanoBool == false);
                 }
 
-                // Pobieramy listę wyników
                 var receptyList = recepty.ToList();
 
-                // Wyświetlamy dane lub komunikat o braku wyników
                 if (!receptyList.Any())
                 {
                     MessageBox.Show("Brak recept spełniających podane kryteria.", "Informacja", MessageBoxButton.OK, MessageBoxImage.Information);
