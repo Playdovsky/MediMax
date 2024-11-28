@@ -28,6 +28,7 @@ namespace Main
         {
             using (var context = new MediMaxEntities())
             {
+                // Pobieramy podstawowe dane
                 var recepty = from r in context.tbl_Recepta
                               join l in context.tbl_Leki on r.IdLeku equals l.Id
                               where r.PESEL == pesel
@@ -35,14 +36,29 @@ namespace Main
                               {
                                   NumerRecepty = r.NumerRecepty,
                                   LekNazwa = l.Nazwa,
-                                  CzyZrealizowano = r.CzyZrealizowano ? "Zrealizowana" : "Nie zrealizowana"
+                                  CzyZrealizowano = r.CzyZrealizowano ? "Zrealizowana" : "Nie zrealizowana",
+                                  CzyZrealizowanoBool = r.CzyZrealizowano // Dodatkowe pole pomocnicze do filtrowania
                               };
 
+                // Filtr numeru recepty
+                if (int.TryParse(NumerReceptyTextBox.Text, out int numerRecepty))
+                {
+                    recepty = recepty.Where(r => r.NumerRecepty == numerRecepty);
+                }
+
+                // Filtr niezrealizowanych recept
+                if (NiezrealizowaneCheckBox.IsChecked == true)
+                {
+                    recepty = recepty.Where(r => r.CzyZrealizowanoBool == false);
+                }
+
+                // Pobieramy listę wyników
                 var receptyList = recepty.ToList();
 
+                // Wyświetlamy dane lub komunikat o braku wyników
                 if (!receptyList.Any())
                 {
-                    MessageBox.Show("Brak recept dla podanego PESELu.", "Informacja", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("Brak recept spełniających podane kryteria.", "Informacja", MessageBoxButton.OK, MessageBoxImage.Information);
                     ReceptyDataGrid.ItemsSource = null;
                 }
                 else
@@ -51,6 +67,7 @@ namespace Main
                 }
             }
         }
+
 
 
         private void PeselTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
