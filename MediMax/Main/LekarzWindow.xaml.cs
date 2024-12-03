@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-
+using SkiaSharp;
 namespace Main
 {
     public partial class LekarzWindow : Window
@@ -139,7 +139,7 @@ namespace Main
                         NumerRecepty = numerRecepty,
                         Zalecenia = ZaleceniaTextBox.Text
                     };
-
+                    SaveReceptaAsImage(pesel, numerRecepty, recepty.Select(r => allLeki.First(l => l.Id == r.IdLeku)).ToList(), ZaleceniaTextBox.Text);
                     context.tbl_Recepta.AddRange(recepty);
                     context.tbl_ReceptaZalecenia.Add(zalecenie);
                     context.SaveChanges();
@@ -206,7 +206,92 @@ namespace Main
             podgladWindow.ShowDialog();
             this.Show();
         }
+        private void SaveReceptaAsImage(string pesel, int numerRecepty, List<Lek> leki, string zalecenia)
+        {
+            string fileName = $"Recepta_{numerRecepty}.png";
 
+            try
+            {
+                int width = 800, height = 1000;
+
+                using (var surface = SKSurface.Create(new SKImageInfo(width, height)))
+                {
+                    var canvas = surface.Canvas;
+                    canvas.Clear(SKColors.White);
+
+                    var backgroundPaint = new SKPaint
+                    {
+                        Color = SKColor.Parse("#F0F0F0") 
+                    };
+                    canvas.DrawRect(0, 0, width, height, backgroundPaint);
+
+                    var headerPaint = new SKPaint
+                    {
+                        TextSize = 32,
+                        IsAntialias = true,
+                        Color = SKColors.DarkBlue,
+                        FakeBoldText = true
+                    };
+
+                    var textPaint = new SKPaint
+                    {
+                        TextSize = 24,
+                        IsAntialias = true,
+                        Color = SKColors.Black
+                    };
+
+                    canvas.DrawText($"Recepta: {numerRecepty}", 20, 50, headerPaint);
+                    canvas.DrawText($"PESEL: {pesel}", 20, 90, headerPaint);
+
+                    var separatorPaint = new SKPaint
+                    {
+                        Color = SKColors.Gray,
+                        StrokeWidth = 2
+                    };
+                    canvas.DrawLine(20, 110, width - 20, 110, separatorPaint);
+
+                    int yOffset = 130;
+                    foreach (var lek in leki)
+                    {
+                        canvas.DrawText($"- {lek.Nazwa} ({lek.Typ}) - {lek.Cena:C}", 20, yOffset, textPaint);
+                        yOffset += 40; 
+                    }
+
+                    canvas.DrawLine(20, yOffset + 10, width - 20, yOffset + 10, separatorPaint);
+
+                    int zaleceniaOffset = yOffset + 40;
+                    var zaleceniaPaint = new SKPaint
+                    {
+                        TextSize = 24,
+                        IsAntialias = true,
+                        Color = SKColors.DarkGreen
+                    };
+
+                    canvas.DrawText($"Zalecenia: {zalecenia}", 20, zaleceniaOffset, zaleceniaPaint);
+
+                    var footerPaint = new SKPaint
+                    {
+                        TextSize = 20,
+                        IsAntialias = true,
+                        Color = SKColors.Gray
+                    };
+                    canvas.DrawText("Wygenerowane przez aplikację MediMax", 20, height - 40, footerPaint);
+
+                    using (var image = surface.Snapshot())
+                    using (var data = image.Encode(SKEncodedImageFormat.Png, 100))
+                    using (var stream = System.IO.File.OpenWrite(fileName))
+                    {
+                        data.SaveTo(stream);
+                    }
+                }
+
+                MessageBox.Show($"Recepta została zapisana w pliku: {fileName}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Błąd podczas zapisu obrazu: {ex.Message}");
+            }
+        }
 
     }
 
