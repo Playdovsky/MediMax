@@ -13,7 +13,7 @@
                 <TextBlock Text="Witaj Lekarzu" FontSize="48" FontWeight="Bold" Foreground="#003366" 
                            HorizontalAlignment="Center" Margin="0,0,0,20"/>
 
-                <TextBlock x:Name="PeselTextBlock" Text="Wprowadź PESEL" Foreground="Gray" Margin="0,0,0,5"/>
+                <TextBlock x:Name="PeselTextBlock" Text="Wprowadź PESEL" Foreground="Gray" Margin="875,0,0,1"/>
                 <TextBox x:Name="PeselTextBox" Width="250" Height="30" Margin="0,0,0,10" MaxLength="11" PreviewTextInput="PeselTextBox_PreviewTextInput" />
 
 

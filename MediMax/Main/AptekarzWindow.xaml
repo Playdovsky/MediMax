@@ -13,11 +13,11 @@
                 <TextBlock Text="Witaj Aptekarzu" FontSize="48" FontWeight="Bold" Foreground="#003366" 
                            HorizontalAlignment="Center" Margin="0,0,0,20"/>
 
-                <TextBlock Text="Wprowadź PESEL" Foreground="Gray" Margin="0,0,0,5"/>
-                <TextBox x:Name="PeselTextBox" Width="250" Height="30" Margin="0,0,0,0" MaxLength="11" 
+                <TextBlock Text="Wprowadź PESEL" Foreground="Gray" Margin="875,0,0,20"/>
+                <TextBox x:Name="PeselTextBox" Width="250" Height="30" Margin="0,0,0,5" MaxLength="11" 
                          PreviewTextInput="PeselTextBox_PreviewTextInput"/>
 
-                <TextBlock Text="Wprowadź Numer Recepty" Foreground="Gray" Margin="0,10,0,5"/>
+                <TextBlock Text="Wprowadź Numer Recepty" Foreground="Gray" Margin="850,0,0,20"/>
                 <TextBox x:Name="NumerReceptyTextBox" Width="250" Height="30" Margin="0,0,0,0"/>
 
                 <Button Content="Wyszukaj" Width="150" Height="40" Background="#FF6347" Foreground="White" 
@@ -41,6 +41,14 @@
                 <DataGrid x:Name="LekiListBox" AutoGenerateColumns="False" SelectionMode="Extended"
                           Height="250" Margin="0,0,0,10" CanUserAddRows="False" CanUserResizeColumns="True" 
                           IsReadOnly="True">
+                    <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="FontSize" Value="16"/> 
+                                <Setter Property="FontWeight" Value="Bold"/>
+
+                            </Style>
+                        </DataGrid.RowStyle>
+                    
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Nazwa" Binding="{Binding Nazwa}" Width="*"/>
                         <DataGridTextColumn Header="Typ" Binding="{Binding Typ}" Width="*"/>
