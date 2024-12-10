@@ -55,6 +55,15 @@
                         <DataGridTextColumn Header="Stan Magazynowy" Binding="{Binding StanMagazynowy}" Width="*"/>
                     </DataGrid.Columns>
                 </DataGrid>
+                <TextBlock Text="Leki bez recepty:" FontWeight="Bold" FontSize="16" Foreground="#003366" Margin="0,10,0,5"/>
+                <DataGrid x:Name="LekiBezReceptyListBox" AutoGenerateColumns="False" SelectionMode="Extended"
+                          Height="150" Margin="0,0,0,10" CanUserAddRows="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Nazwa" Binding="{Binding Nazwa}" Width="*"/>
+                        <DataGridTextColumn Header="Typ" Binding="{Binding Typ}" Width="*"/>
+                        <DataGridTextColumn Header="Stan Magazynowy" Binding="{Binding StanMagazynowy}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
 
                 <Button Content="Zrealizuj Wybrane Leki" Width="200" Height="50" Foreground="White" FontSize="18" 
                         Background="#FF6347" Click="ZrealizujLeki_Click" HorizontalAlignment="Center">
@@ -89,21 +98,19 @@
                 </Button>
                 <Button Content="Zamów" Width="200" Height="50" Foreground="White" FontSize="18"
         Background="#FF6347" Click="OrderButton_Click" HorizontalAlignment="Center" Margin="0,10,0,0">
-    <Button.Template>
-        <ControlTemplate TargetType="{x:Type Button}">
-            <Border x:Name="border" CornerRadius="10" Background="{TemplateBinding Background}">
-                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            </Border>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter TargetName="border" Property="Background" Value="#FF4500"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-    </Button.Template>
-</Button>
-
-
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="border" CornerRadius="10" Background="{TemplateBinding Background}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#FF4500"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
             </StackPanel>
         </Border>
     </Grid>

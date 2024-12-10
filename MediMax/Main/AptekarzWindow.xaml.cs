@@ -10,12 +10,14 @@ namespace Main
     public partial class AptekarzWindow : Window
     {
         private List<LekDoRealizacji> lekiDoRealizacji = new List<LekDoRealizacji>();
+        private List<LekDoRealizacji> lekiBezRecepty = new List<LekDoRealizacji>();
 
         public AptekarzWindow()
         {
             InitializeComponent();
             RemoveExpiredMedicines();
             CheckLowStockMedicines();
+            LoadNonPrescriptionMedicines();
         }
 
         private void CheckLowStockMedicines()
@@ -65,7 +67,26 @@ namespace Main
                 }
             }
         }
-            private void WyszukajRecepta_Click(object sender, RoutedEventArgs e)
+        private void LoadNonPrescriptionMedicines()
+        {
+            using (var context = new MediMaxEntities())
+            {
+                lekiBezRecepty = context.tbl_Leki
+                    .Where(lek => !lek.CzyNaRecepte)
+                    .Select(lek => new LekDoRealizacji
+                    {
+                        Id = lek.Id,
+                        Nazwa = lek.Nazwa,
+                        Typ = lek.Typ,
+                        StanMagazynowy = lek.tbl_StanMagazynowy.Sum(s => s.Ilosc),
+                        CzyZrealizowano = false
+                    })
+                    .ToList();
+
+                LekiBezReceptyListBox.ItemsSource = lekiBezRecepty;
+            }
+        }
+        private void WyszukajRecepta_Click(object sender, RoutedEventArgs e)
         {
             string pesel = PeselTextBox.Text;
             int numerRecepty;
@@ -111,23 +132,21 @@ namespace Main
 
         private void ZrealizujLeki_Click(object sender, RoutedEventArgs e)
         {
-            if (LekiListBox.SelectedItems.Count == 0)
-            {
-                MessageBox.Show("Wybierz przynajmniej jeden lek do realizacji.");
-                return;
-            }
+            var selectedLeki = LekiListBox.SelectedItems.Cast<LekDoRealizacji>().ToList();
+            var selectedNonPrescriptionLeki = LekiBezReceptyListBox.SelectedItems.Cast<LekDoRealizacji>().ToList();
 
             using (var context = new MediMaxEntities())
             {
                 bool allMedicinesRealized = true;
 
-                foreach (LekDoRealizacji lek in LekiListBox.SelectedItems)
+                foreach (var lek in selectedLeki)
                 {
-                    var stanMagazynowyDb = context.tbl_StanMagazynowy.FirstOrDefault(s => s.IdLeku == lek.Id);
                     var receptaDb = context.tbl_Recepta
                         .FirstOrDefault(r => r.IdLeku == lek.Id && !r.CzyZrealizowano);
 
-                    if (stanMagazynowyDb != null && receptaDb != null)
+                    var stanMagazynowyDb = context.tbl_StanMagazynowy.FirstOrDefault(s => s.IdLeku == lek.Id);
+
+                    if (receptaDb != null && stanMagazynowyDb != null)
                     {
                         if (stanMagazynowyDb.Ilosc > 0)
                         {
@@ -136,10 +155,27 @@ namespace Main
                         }
                         else
                         {
-                          
                             SingleOrderWindow orderWindow = new SingleOrderWindow(lek.Id);
                             orderWindow.ShowDialog();
+                            allMedicinesRealized = false;
+                        }
+                    }
+                }
 
+                foreach (var lek in selectedNonPrescriptionLeki)
+                {
+                    var stanMagazynowyDb = context.tbl_StanMagazynowy.FirstOrDefault(s => s.IdLeku == lek.Id);
+
+                    if (stanMagazynowyDb != null)
+                    {
+                        if (stanMagazynowyDb.Ilosc > 0)
+                        {
+                            stanMagazynowyDb.Ilosc -= 1;
+                        }
+                        else
+                        {
+                            SingleOrderWindow orderWindow = new SingleOrderWindow(lek.Id);
+                            orderWindow.ShowDialog();
                             allMedicinesRealized = false;
                         }
                     }
@@ -156,12 +192,14 @@ namespace Main
                     MessageBox.Show("Niektóre leki nie mogły być zrealizowane z powodu braku w magazynie. Zostały zamówione.");
                 }
 
-                PeselTextBox.Text = string.Empty;
-                NumerReceptyTextBox.Text = string.Empty;
                 LekiListBox.ItemsSource = null;
+                LekiBezReceptyListBox.ItemsSource = null;
                 lekiDoRealizacji.Clear();
+                lekiBezRecepty.Clear();
+                LoadNonPrescriptionMedicines();
             }
         }
+
 
         private bool IsPeselValid(string pesel)
         {
