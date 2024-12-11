@@ -231,6 +231,11 @@ namespace Main
             orderWindow.ShowDialog();
         }
 
+        private void PrzeprowadzStatystyke_Click(object sender, RoutedEventArgs e)
+        {
+            StatystykaWindow statystykaWindow = new StatystykaWindow();
+            statystykaWindow.ShowDialog();
+        }
     }
 
 

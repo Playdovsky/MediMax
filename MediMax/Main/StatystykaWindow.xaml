@@ -1,0 +1,40 @@
+﻿<Window x:Class="Main.StatystykaWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Main"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        mc:Ignorable="d"
+        Title="StatystykaWindow" Height="450" Width="800">
+    <Grid>
+        <lvc:PieChart 
+                      Name="WykresLekow"
+                      Width="226"
+                      Height="231"
+                      HorizontalAlignment="Left"
+                      VerticalAlignment="Top"
+                      Margin="532,126,0,0"
+                      HoverPushOut="15">
+        </lvc:PieChart>
+
+        <TextBlock Text="STATYSTYKA" FontSize="36" FontWeight="Bold" Foreground="#003366" Margin="70,20,400,351"/>
+        <Label Content="Zrealizowane recepty:" HorizontalAlignment="Left" Margin="64,113,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="Niezrealizowane recepty:" HorizontalAlignment="Left" Margin="64,139,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="Najczęściej przepisywany lek:" HorizontalAlignment="Left" Margin="64,217,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="Najrzadziej przepisywany lek:" HorizontalAlignment="Left" Margin="64,243,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="Najdroższy lek:" HorizontalAlignment="Left" Margin="64,269,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="Najtańszy lek:" HorizontalAlignment="Left" Margin="64,295,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="Ilość leków bez recepty:" HorizontalAlignment="Left" Margin="64,165,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="Ilość leków na receptę:" HorizontalAlignment="Left" Margin="64,191,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label x:Name="ZrealizowaneLabel" Content="Label" HorizontalAlignment="Left" Margin="260,113,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="NiezrealizowaneLabel" Content="Label" HorizontalAlignment="Left" Margin="260,139,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="BezReceptyLabel" Content="Label" HorizontalAlignment="Left" Margin="260,165,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="NaRecepteLabel" Content="Label" HorizontalAlignment="Left" Margin="260,191,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="NajczesciejPrzepisywanyLabel" Content="Label" HorizontalAlignment="Left" Margin="260,217,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="NajrzadziejPrzepisywanyLabel" Content="Label" HorizontalAlignment="Left" Margin="260,243,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="NajdrozszyLabel" Content="Label" HorizontalAlignment="Left" Margin="260,269,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="NajtanszyLabel" Content="Label" HorizontalAlignment="Left" Margin="260,290,0,0" VerticalAlignment="Top"/>
+        <Label Content="Stan magazynowy" HorizontalAlignment="Left" Height="38" Margin="592,83,0,0" VerticalAlignment="Top" Width="106" RenderTransformOrigin="0.44,0.343"/>
+    </Grid>
+</Window>
