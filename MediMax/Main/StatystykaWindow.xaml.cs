@@ -47,7 +47,6 @@ namespace Main
                           })
                     .ToList();
 
-                // Tworzymy listę nazw leków i ilości sprzedaży do wyświetlenia
                 NajczesciejSprzedawaneLekiListBox.Items.Clear();
                 foreach (var item in statystyki)
                 {
@@ -76,15 +75,12 @@ namespace Main
 
             if (!string.IsNullOrEmpty(wybranyLek))
             {
-                // Pobierz dane dla wybranego leku
                 var statystyki = GetStatystykiDlaLeku(wybranyLek);
 
-                // Wyświetl szczegóły leku
                 CalkowitaSprzedazLabel.Content = statystyki.CalkowitaSprzedaz.ToString();
                 SredniaCenaLabel.Content = $"{statystyki.SredniaCena:C}";
                 LacznePrzychodyLabel.Content = $"{statystyki.LacznePrzychody:C}";
 
-                // Zaktualizuj wykres
                 HistoriaZamowienWykres.Series = new SeriesCollection
         {
             new LineSeries
@@ -103,7 +99,6 @@ namespace Main
         {
             using (var context = new MediMaxEntities())
             {
-                // Znajdź ID leku na podstawie nazwy
                 var lek = context.tbl_Leki.FirstOrDefault(l => l.Nazwa == nazwaLeku);
                 if (lek == null)
                 {

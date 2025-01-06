@@ -9,28 +9,20 @@
         Title="Statystyka Leków" Height="800" Width="1200">
 
     <Grid Margin="10">
-        <!-- Nagłówek -->
         <Label Content="STATYSTYKI LEKÓW" 
                FontSize="36" FontWeight="Bold" Foreground="#003366"
                HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,20"/>
 
-        <!-- Główna siatka -->
         <Grid Margin="10,60,10,10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <!-- Definicje rzędów i kolumn -->
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*"/>
-                <!-- Statystyki ogólne -->
                 <RowDefinition Height="3*"/>
-                <!-- Wykresy -->
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"/>
-                <!-- Statystyki -->
                 <ColumnDefinition Width="7*"/>
-                <!-- Wykresy -->
             </Grid.ColumnDefinitions>
 
-            <!-- Sekcja: Ogólne statystyki -->
             <GroupBox Header="Ogólne statystyki" FontSize="16" FontWeight="Bold" 
                       Grid.Row="0" Grid.Column="0" Margin="10">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -62,7 +54,6 @@
                 </ScrollViewer>
             </GroupBox>
 
-            <!-- Sekcja: Wykresy leków -->
             <GroupBox Header="Stan magazynowy" FontSize="16" FontWeight="Bold" 
                       Grid.Row="0" Grid.Column="1" Margin="10">
                 <Grid>
@@ -71,7 +62,6 @@
                 </Grid>
             </GroupBox>
 
-            <!-- Sekcja: Statystyki dla wybranego leku -->
             <GroupBox Header="Statystyki dla wybranego leku" FontSize="16" FontWeight="Bold" 
                       Grid.Row="1" Grid.Column="0" Margin="10">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -99,7 +89,6 @@
                 </ScrollViewer>
             </GroupBox>
 
-            <!-- Sekcja: Historia zamówień -->
             <GroupBox Header="Historia zamówień" FontSize="16" FontWeight="Bold" 
                       Grid.Row="1" Grid.Column="1" Margin="10">
                 <Grid>
