@@ -6,35 +6,118 @@
         xmlns:local="clr-namespace:Main"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
-        Title="StatystykaWindow" Height="450" Width="800">
-    <Grid>
-        <lvc:PieChart 
-                      Name="WykresLekow"
-                      Width="226"
-                      Height="231"
-                      HorizontalAlignment="Left"
-                      VerticalAlignment="Top"
-                      Margin="532,126,0,0"
-                      HoverPushOut="15">
-        </lvc:PieChart>
+        Title="Statystyka Leków" Height="800" Width="1200">
 
-        <TextBlock Text="STATYSTYKA" FontSize="36" FontWeight="Bold" Foreground="#003366" Margin="70,20,400,351"/>
-        <Label Content="Zrealizowane recepty:" HorizontalAlignment="Left" Margin="64,113,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <Label Content="Niezrealizowane recepty:" HorizontalAlignment="Left" Margin="64,139,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <Label Content="Najczęściej przepisywany lek:" HorizontalAlignment="Left" Margin="64,217,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <Label Content="Najrzadziej przepisywany lek:" HorizontalAlignment="Left" Margin="64,243,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <Label Content="Najdroższy lek:" HorizontalAlignment="Left" Margin="64,269,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <Label Content="Najtańszy lek:" HorizontalAlignment="Left" Margin="64,295,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <Label Content="Ilość leków bez recepty:" HorizontalAlignment="Left" Margin="64,165,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <Label Content="Ilość leków na receptę:" HorizontalAlignment="Left" Margin="64,191,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <Label x:Name="ZrealizowaneLabel" Content="Label" HorizontalAlignment="Left" Margin="260,113,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="NiezrealizowaneLabel" Content="Label" HorizontalAlignment="Left" Margin="260,139,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="BezReceptyLabel" Content="Label" HorizontalAlignment="Left" Margin="260,165,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="NaRecepteLabel" Content="Label" HorizontalAlignment="Left" Margin="260,191,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="NajczesciejPrzepisywanyLabel" Content="Label" HorizontalAlignment="Left" Margin="260,217,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="NajrzadziejPrzepisywanyLabel" Content="Label" HorizontalAlignment="Left" Margin="260,243,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="NajdrozszyLabel" Content="Label" HorizontalAlignment="Left" Margin="260,269,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="NajtanszyLabel" Content="Label" HorizontalAlignment="Left" Margin="260,290,0,0" VerticalAlignment="Top"/>
-        <Label Content="Stan magazynowy" HorizontalAlignment="Left" Height="38" Margin="592,83,0,0" VerticalAlignment="Top" Width="106" RenderTransformOrigin="0.44,0.343"/>
+    <Grid Margin="10">
+        <!-- Nagłówek -->
+        <Label Content="STATYSTYKI LEKÓW" 
+               FontSize="36" FontWeight="Bold" Foreground="#003366"
+               HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,20"/>
+
+        <!-- Główna siatka -->
+        <Grid Margin="10,60,10,10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <!-- Definicje rzędów i kolumn -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <!-- Statystyki ogólne -->
+                <RowDefinition Height="3*"/>
+                <!-- Wykresy -->
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <!-- Statystyki -->
+                <ColumnDefinition Width="7*"/>
+                <!-- Wykresy -->
+            </Grid.ColumnDefinitions>
+
+            <!-- Sekcja: Ogólne statystyki -->
+            <GroupBox Header="Ogólne statystyki" FontSize="16" FontWeight="Bold" 
+                      Grid.Row="0" Grid.Column="0" Margin="10">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="10">
+                        <Label Content="Zrealizowane recepty:" FontWeight="Bold"/>
+                        <Label x:Name="ZrealizowaneLabel" Content="0"/>
+
+                        <Label Content="Niezrealizowane recepty:" FontWeight="Bold"/>
+                        <Label x:Name="NiezrealizowaneLabel" Content="0"/>
+
+                        <Label Content="Leki bez recepty:" FontWeight="Bold"/>
+                        <Label x:Name="BezReceptyLabel" Content="0"/>
+
+                        <Label Content="Leki na receptę:" FontWeight="Bold"/>
+                        <Label x:Name="NaRecepteLabel" Content="0"/>
+
+                        <Label Content="Najczęściej przepisywany lek:" FontWeight="Bold"/>
+                        <Label x:Name="NajczesciejPrzepisywanyLabel" Content="-" MaxWidth="250" />
+
+                        <Label Content="Najrzadziej przepisywany lek:" FontWeight="Bold"/>
+                        <Label x:Name="NajrzadziejPrzepisywanyLabel" Content="-" MaxWidth="250" />
+
+                        <Label Content="Najdroższy lek:" FontWeight="Bold"/>
+                        <Label x:Name="NajdrozszyLabel" Content="-" MaxWidth="250" />
+
+                        <Label Content="Najtańszy lek:" FontWeight="Bold"/>
+                        <Label x:Name="NajtanszyLabel" Content="-" MaxWidth="250" />
+                    </StackPanel>
+                </ScrollViewer>
+            </GroupBox>
+
+            <!-- Sekcja: Wykresy leków -->
+            <GroupBox Header="Stan magazynowy" FontSize="16" FontWeight="Bold" 
+                      Grid.Row="0" Grid.Column="1" Margin="10">
+                <Grid>
+                    <lvc:PieChart Name="WykresLekow" HoverPushOut="10" LegendLocation="Right" 
+                                  MinHeight="300" MinWidth="300"/>
+                </Grid>
+            </GroupBox>
+
+            <!-- Sekcja: Statystyki dla wybranego leku -->
+            <GroupBox Header="Statystyki dla wybranego leku" FontSize="16" FontWeight="Bold" 
+                      Grid.Row="1" Grid.Column="0" Margin="10">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="10">
+                        <Label Content="Wybierz lek:" FontWeight="Bold"/>
+                        <ComboBox x:Name="LekComboBox" Width="200" Margin="0,5,0,10"
+                                  SelectionChanged="LekComboBox_SelectionChanged"/>
+
+                        <Label Content="Ilość zamówionych:" FontWeight="Bold"/>
+                        <Label x:Name="CalkowitaSprzedazLabel" Content="0"/>
+
+                        <Label Content="Średnia cena:" FontWeight="Bold"/>
+                        <Label x:Name="SredniaCenaLabel" Content="0"/>
+
+                        <Label Content="Estymowane przychody:" FontWeight="Bold"/>
+                        <Label x:Name="LacznePrzychodyLabel" Content="0"/>
+                        <Label Content="Najczęściej sprzedawane leki:" />
+                        <ListBox x:Name="NajczesciejSprzedawaneLekiListBox"
+         Margin="10"
+         Width="300"
+         Height="200" />
+
+                    </StackPanel>
+                    
+                </ScrollViewer>
+            </GroupBox>
+
+            <!-- Sekcja: Historia zamówień -->
+            <GroupBox Header="Historia zamówień" FontSize="16" FontWeight="Bold" 
+                      Grid.Row="1" Grid.Column="1" Margin="10">
+                <Grid>
+                    <lvc:CartesianChart Name="HistoriaZamowienWykres" MinHeight="300" MinWidth="400">
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis Title="Data" LabelsRotation="15">
+                                <lvc:Axis.Separator>
+                                    <lvc:Separator Step="1"/>
+                                </lvc:Axis.Separator>
+                            </lvc:Axis>
+                        </lvc:CartesianChart.AxisX>
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis Title="Liczba zamówień"/>
+                        </lvc:CartesianChart.AxisY>
+                    </lvc:CartesianChart>
+                </Grid>
+            </GroupBox>
+        </Grid>
     </Grid>
+    
 </Window>
