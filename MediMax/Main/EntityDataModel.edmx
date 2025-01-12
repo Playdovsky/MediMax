@@ -41,6 +41,15 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nazwa" Type="varchar" MaxLength="20" Nullable="false" />
         </EntityType>
+        <EntityType Name="tbl_Sprzedaz">
+          <Key>
+            <PropertyRef Name="IdSprzedazy" />
+          </Key>
+          <Property Name="IdSprzedazy" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdLekuSprzedanego" Type="int" Nullable="false" />
+          <Property Name="DataSprzedazy" Type="date" Nullable="false" />
+          <Property Name="IdAptekarza" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="tbl_StanMagazynowy">
           <Key>
             <PropertyRef Name="Id" />
@@ -109,6 +118,18 @@ warning 6002: The table/view 'medimaxapteka.sys.database_firewall_rules' does no
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__tbl_Sprze__IdLek__29221CFB">
+          <End Role="tbl_Leki" Type="Self.tbl_Leki" Multiplicity="1" />
+          <End Role="tbl_Sprzedaz" Type="Self.tbl_Sprzedaz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Leki">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tbl_Sprzedaz">
+              <PropertyRef Name="IdLekuSprzedanego" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__tbl_StanM__IdLek__6FE99F9F">
           <End Role="tbl_Leki" Type="Self.tbl_Leki" Multiplicity="1" />
           <End Role="tbl_StanMagazynowy" Type="Self.tbl_StanMagazynowy" Multiplicity="*" />
@@ -162,6 +183,7 @@ warning 6002: The table/view 'medimaxapteka.sys.database_firewall_rules' does no
           <EntitySet Name="tbl_Recepta" EntityType="Self.tbl_Recepta" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_ReceptaZalecenia" EntityType="Self.tbl_ReceptaZalecenia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_Rola" EntityType="Self.tbl_Rola" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Sprzedaz" EntityType="Self.tbl_Sprzedaz" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_StanMagazynowy" EntityType="Self.tbl_StanMagazynowy" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_Uzytkownik" EntityType="Self.tbl_Uzytkownik" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_Zamowienia" EntityType="Self.tbl_Zamowienia" Schema="dbo" store:Type="Tables" />
@@ -179,6 +201,10 @@ warning 6002: The table/view 'medimaxapteka.sys.database_firewall_rules' does no
           <AssociationSet Name="FK__tbl_Recep__IdLek__6383C8BA" Association="Self.FK__tbl_Recep__IdLek__6383C8BA">
             <End Role="tbl_Leki" EntitySet="tbl_Leki" />
             <End Role="tbl_Recepta" EntitySet="tbl_Recepta" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tbl_Sprze__IdLek__29221CFB" Association="Self.FK__tbl_Sprze__IdLek__29221CFB">
+            <End Role="tbl_Leki" EntitySet="tbl_Leki" />
+            <End Role="tbl_Sprzedaz" EntitySet="tbl_Sprzedaz" />
           </AssociationSet>
           <AssociationSet Name="FK__tbl_StanM__IdLek__6FE99F9F" Association="Self.FK__tbl_StanM__IdLek__6FE99F9F">
             <End Role="tbl_Leki" EntitySet="tbl_Leki" />
@@ -215,6 +241,7 @@ warning 6002: The table/view 'medimaxapteka.sys.database_firewall_rules' does no
           <NavigationProperty Name="tbl_Zamowienia" Relationship="MediMaxEntitiesNamespace.FK__tbl_Zamow__IdLek__06CD04F7" FromRole="tbl_Leki" ToRole="tbl_Zamowienia" />
           <NavigationProperty Name="tbl_ZapotrzebowanieLeku" Relationship="MediMaxEntitiesNamespace.FK__tbl_Zapot__IdLek__03F0984C" FromRole="tbl_Leki" ToRole="tbl_ZapotrzebowanieLeku" />
           <Property Name="IloscWOpakowaniu" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tbl_Sprzedaz" Relationship="MediMaxEntitiesNamespace.FK__tbl_Sprze__IdLek__29221CFB" FromRole="tbl_Leki" ToRole="tbl_Sprzedaz" />
         </EntityType>
         <EntityType Name="tbl_Recepta">
           <Key>
@@ -325,6 +352,11 @@ warning 6002: The table/view 'medimaxapteka.sys.database_firewall_rules' does no
             <End Role="tbl_Leki" EntitySet="tbl_Leki" />
             <End Role="tbl_ZapotrzebowanieLeku" EntitySet="tbl_ZapotrzebowanieLeku" />
           </AssociationSet>
+          <EntitySet Name="tbl_Sprzedaz" EntityType="MediMaxEntitiesNamespace.tbl_Sprzedaz" />
+          <AssociationSet Name="FK__tbl_Sprze__IdLek__29221CFB" Association="MediMaxEntitiesNamespace.FK__tbl_Sprze__IdLek__29221CFB">
+            <End Role="tbl_Leki" EntitySet="tbl_Leki" />
+            <End Role="tbl_Sprzedaz" EntitySet="tbl_Sprzedaz" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="tbl_StanMagazynowy">
           <Key>
@@ -389,6 +421,28 @@ warning 6002: The table/view 'medimaxapteka.sys.database_firewall_rules' does no
             </Principal>
             <Dependent Role="tbl_ZapotrzebowanieLeku">
               <PropertyRef Name="IdLeku" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="tbl_Sprzedaz">
+          <Key>
+            <PropertyRef Name="IdSprzedazy" />
+          </Key>
+          <Property Name="IdSprzedazy" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdLekuSprzedanego" Type="Int32" Nullable="false" />
+          <Property Name="DataSprzedazy" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="IdAptekarza" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tbl_Leki" Relationship="MediMaxEntitiesNamespace.FK__tbl_Sprze__IdLek__29221CFB" FromRole="tbl_Sprzedaz" ToRole="tbl_Leki" />
+        </EntityType>
+        <Association Name="FK__tbl_Sprze__IdLek__29221CFB">
+          <End Type="MediMaxEntitiesNamespace.tbl_Leki" Role="tbl_Leki" Multiplicity="1" />
+          <End Type="MediMaxEntitiesNamespace.tbl_Sprzedaz" Role="tbl_Sprzedaz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Leki">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tbl_Sprzedaz">
+              <PropertyRef Name="IdLekuSprzedanego" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -489,6 +543,16 @@ warning 6002: The table/view 'medimaxapteka.sys.database_firewall_rules' does no
                 <ScalarProperty Name="IloscPrzepisanych" ColumnName="IloscPrzepisanych" />
                 <ScalarProperty Name="IdLeku" ColumnName="IdLeku" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_Sprzedaz">
+            <EntityTypeMapping TypeName="MediMaxEntitiesNamespace.tbl_Sprzedaz">
+              <MappingFragment StoreEntitySet="tbl_Sprzedaz">
+                <ScalarProperty Name="IdAptekarza" ColumnName="IdAptekarza" />
+                <ScalarProperty Name="DataSprzedazy" ColumnName="DataSprzedazy" />
+                <ScalarProperty Name="IdLekuSprzedanego" ColumnName="IdLekuSprzedanego" />
+                <ScalarProperty Name="IdSprzedazy" ColumnName="IdSprzedazy" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

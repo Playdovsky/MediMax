@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenTK.Graphics.ES11;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -145,6 +146,7 @@ namespace Main
                         .FirstOrDefault(r => r.IdLeku == lek.Id && !r.CzyZrealizowano);
 
                     var stanMagazynowyDb = context.tbl_StanMagazynowy.FirstOrDefault(s => s.IdLeku == lek.Id);
+                    var sprzedazDb = context.tbl_Sprzedaz;
 
                     if (receptaDb != null && stanMagazynowyDb != null)
                     {
@@ -152,6 +154,13 @@ namespace Main
                         {
                             stanMagazynowyDb.Ilosc -= 1;
                             receptaDb.CzyZrealizowano = true;
+                            sprzedazDb.Add(new tbl_Sprzedaz
+                            {
+                                IdLekuSprzedanego = lek.Id,
+                                DataSprzedazy = DateTime.Now,
+                                IdAptekarza = 1
+                            }) ;
+
                         }
                         else
                         {
@@ -165,12 +174,20 @@ namespace Main
                 foreach (var lek in selectedNonPrescriptionLeki)
                 {
                     var stanMagazynowyDb = context.tbl_StanMagazynowy.FirstOrDefault(s => s.IdLeku == lek.Id);
+                    var sprzedazDb = context.tbl_Sprzedaz;
+
 
                     if (stanMagazynowyDb != null)
                     {
                         if (stanMagazynowyDb.Ilosc > 0)
                         {
                             stanMagazynowyDb.Ilosc -= 1;
+                            sprzedazDb.Add(new tbl_Sprzedaz
+                            {
+                                IdLekuSprzedanego = lek.Id,
+                                DataSprzedazy = DateTime.Now,
+                                IdAptekarza = 1
+                            });
                         }
                         else
                         {

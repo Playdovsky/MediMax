@@ -190,6 +190,9 @@
     <Compile Include="tbl_Rola.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="tbl_Sprzedaz.cs">
+      <DependentUpon>EntityDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="tbl_StanMagazynowy.cs">
       <DependentUpon>EntityDataModel.tt</DependentUpon>
     </Compile>

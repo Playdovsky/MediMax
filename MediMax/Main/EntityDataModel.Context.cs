@@ -34,5 +34,6 @@ namespace Main
         public virtual DbSet<tbl_StanMagazynowy> tbl_StanMagazynowy { get; set; }
         public virtual DbSet<tbl_Zamowienia> tbl_Zamowienia { get; set; }
         public virtual DbSet<tbl_ZapotrzebowanieLeku> tbl_ZapotrzebowanieLeku { get; set; }
+        public virtual DbSet<tbl_Sprzedaz> tbl_Sprzedaz { get; set; }
     }
 }

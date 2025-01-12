@@ -24,12 +24,11 @@ namespace Main
         {
             using (var context = new MediMaxEntities())
             {
-                var sprzedaneLeki = context.tbl_Recepta
-                    .Where(r => r.CzyZrealizowano)
-                    .GroupBy(r => r.IdLeku)
+                var sprzedaneLeki = context.tbl_Sprzedaz
+                    .GroupBy(r => r.IdLekuSprzedanego)
                     .Select(group => new
                     {
-                        IdLeku = group.Key,
+                        IdLekuSprzedanego = group.Key,
                         IloscSprzedazy = group.Count()
                     })
                     .OrderByDescending(lek => lek.IloscSprzedazy)
@@ -37,9 +36,9 @@ namespace Main
                     .ToList();
 
                 var statystyki = sprzedaneLeki
-                    .Join(context.tbl_Leki,
-                          sprzedaz => sprzedaz.IdLeku,
-                          lek => lek.Id,
+                    .Join(context.tbl_Leki.AsEnumerable(),
+                          sprzedaz => sprzedaz.IdLekuSprzedanego,
+                          lek => lek.Id,                        
                           (sprzedaz, lek) => new
                           {
                               NazwaLeku = lek.Nazwa,

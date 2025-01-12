@@ -7,7 +7,7 @@
       <Diagram DiagramId="7f95b1aaeb8f4c6ea6c3c660c27b66e0" Name="Diagram1">
         <EntityTypeShape EntityType="MediMaxEntitiesNamespace.tbl_Leki" Width="1.5" PointX="0.75" PointY="4.875" IsExpanded="true" />
         <EntityTypeShape EntityType="MediMaxEntitiesNamespace.tbl_Recepta" Width="1.5" PointX="3" PointY="4.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="MediMaxEntitiesNamespace.tbl_ReceptaZalecenia" Width="1.875" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MediMaxEntitiesNamespace.tbl_ReceptaZalecenia" Width="1.875" PointX="5.625" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="MediMaxEntitiesNamespace.tbl_Rola" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
         <EntityTypeShape EntityType="MediMaxEntitiesNamespace.tbl_Uzytkownik" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="MediMaxEntitiesNamespace.database_firewall_rules" Width="2.375" PointX="5.75" PointY="3.75" IsExpanded="true" />
@@ -19,6 +19,8 @@
         <EntityTypeShape EntityType="MediMaxEntitiesNamespace.tbl_ZapotrzebowanieLeku" Width="1.5" PointX="3" PointY="13.875" />
         <AssociationConnector Association="MediMaxEntitiesNamespace.FK__tbl_Zamow__IdLek__06CD04F7" />
         <AssociationConnector Association="MediMaxEntitiesNamespace.FK__tbl_Zapot__IdLek__03F0984C" />
+        <EntityTypeShape EntityType="MediMaxEntitiesNamespace.tbl_Sprzedaz" Width="1.5" PointX="3" PointY="16.5" />
+        <AssociationConnector Association="MediMaxEntitiesNamespace.FK__tbl_Sprze__IdLek__29221CFB" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
