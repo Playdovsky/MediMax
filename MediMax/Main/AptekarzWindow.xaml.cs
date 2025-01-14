@@ -80,13 +80,22 @@ namespace Main
                         Nazwa = lek.Nazwa,
                         Typ = lek.Typ,
                         StanMagazynowy = lek.tbl_StanMagazynowy.Sum(s => s.Ilosc),
-                        CzyZrealizowano = false
+                        CzyZrealizowano = false,
+                        CzyPremiowany = false
                     })
                     .ToList();
+
+                var random = new Random();
+                var premiowaneLeki = lekiBezRecepty.OrderBy(x => random.Next()).Take(2).ToList();
+                foreach (var lek in premiowaneLeki)
+                {
+                    lek.CzyPremiowany = true;
+                }
 
                 LekiBezReceptyListBox.ItemsSource = lekiBezRecepty;
             }
         }
+
         private void WyszukajRecepta_Click(object sender, RoutedEventArgs e)
         {
             string pesel = PeselTextBox.Text;
@@ -263,6 +272,7 @@ namespace Main
         public string Typ { get; set; }
         public int StanMagazynowy { get; set; }
         public bool CzyZrealizowano { get; set; }
+        public bool CzyPremiowany { get; set; }
     }
 
 }

@@ -19,7 +19,6 @@ namespace Main
 
             using (var context = new MediMaxEntities()) 
             {
-                
                 var uzytkownik = context.tbl_Uzytkownik
                                         .Include("tbl_Rola")
                                         .FirstOrDefault(u => u.Email == email && u.Haslo == haslo);
@@ -65,6 +64,5 @@ namespace Main
             RegistrationWindow registrationWindow = new RegistrationWindow();
             registrationWindow.Show();
         }
-
     }
 }
