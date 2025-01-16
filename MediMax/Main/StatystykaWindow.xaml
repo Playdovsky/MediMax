@@ -90,9 +90,25 @@
             </GroupBox>
 
             <GroupBox Header="Historia zamówień" FontSize="16" FontWeight="Bold" 
-                      Grid.Row="1" Grid.Column="1" Margin="10">
+          Grid.Row="1" Grid.Column="1" Margin="10">
                 <Grid>
-                    <lvc:CartesianChart Name="HistoriaZamowienWykres" MinHeight="300" MinWidth="400">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="0">
+                        <Label Content="Początek:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <DatePicker x:Name="StartDatePicker" Margin="0,0,10,0"/>
+                        <Label Content="Koniec:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <DatePicker x:Name="EndDatePicker" Margin="0,0,10,0"/>
+                        <Button Content="Aktualizuj wykres" Click="AktualizujWykres_Click" Margin="0,0,10,0"/>
+                        <Button Content="Eksportuj do PDF" Click="EksportujPDF_Click" Margin="0,0,10,0"/>
+                        <Button Content="Resetuj daty" Click="ResetujDaty_Click"/>
+
+                    </StackPanel>
+
+                    <lvc:CartesianChart Name="HistoriaZamowienWykres" MinHeight="300" MinWidth="400" Grid.Row="1">
                         <lvc:CartesianChart.AxisX>
                             <lvc:Axis Title="Data" LabelsRotation="15">
                                 <lvc:Axis.Separator>

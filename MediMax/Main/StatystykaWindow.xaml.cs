@@ -5,6 +5,12 @@ using System.Windows;
 using System.Collections.Generic;
 using System.Windows.Controls;
 using System;
+using Microsoft.Win32;
+using System.IO;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 
 namespace Main
 {
@@ -74,7 +80,10 @@ namespace Main
 
             if (!string.IsNullOrEmpty(wybranyLek))
             {
-                var statystyki = GetStatystykiDlaLeku(wybranyLek);
+                DateTime? startDate = StartDatePicker?.SelectedDate;
+                DateTime? endDate = EndDatePicker?.SelectedDate;
+
+                var statystyki = GetStatystykiDlaLeku(wybranyLek, startDate, endDate);
 
                 CalkowitaSprzedazLabel.Content = statystyki.CalkowitaSprzedaz.ToString();
                 SredniaCenaLabel.Content = $"{statystyki.SredniaCena:C}";
@@ -93,8 +102,9 @@ namespace Main
             }
         }
 
+
         private (int CalkowitaSprzedaz, decimal SredniaCena, decimal LacznePrzychody, List<int> IstoriaZamowien, List<DateTime> DatyZamowien)
-            GetStatystykiDlaLeku(string nazwaLeku)
+     GetStatystykiDlaLeku(string nazwaLeku, DateTime? startDate, DateTime? endDate)
         {
             using (var context = new MediMaxEntities())
             {
@@ -105,26 +115,112 @@ namespace Main
                 }
 
                 int idLeku = lek.Id;
-
                 var zamowienia = context.tbl_Zamowienia
-                    .Where(z => z.IdLeku == idLeku)
-                    .OrderBy(z => z.DataZamowienia)
-                    .ToList();
+                    .Where(z => z.IdLeku == idLeku);
 
-                if (!zamowienia.Any())
+                if (startDate.HasValue)
+                    zamowienia = zamowienia.Where(z => z.DataZamowienia >= startDate.Value);
+                if (endDate.HasValue)
+                    zamowienia = zamowienia.Where(z => z.DataZamowienia <= endDate.Value);
+
+                var zamowieniaLista = zamowienia.OrderBy(z => z.DataZamowienia).ToList();
+
+                if (!zamowieniaLista.Any())
                 {
                     return (0, 0, 0, new List<int>(), new List<DateTime>());
                 }
 
-                int calkowitaSprzedaz = zamowienia.Sum(z => z.Ilosc);
-                decimal sredniaCena = zamowienia.Average(z => z.tbl_Leki.Cena ?? 0);
-                decimal lacznePrzychody = zamowienia.Sum(z => z.Ilosc * (z.tbl_Leki.Cena ?? 0));
+                int calkowitaSprzedaz = zamowieniaLista.Sum(z => z.Ilosc);
+                decimal sredniaCena = zamowieniaLista.Average(z => z.tbl_Leki.Cena ?? 0);
+                decimal lacznePrzychody = zamowieniaLista.Sum(z => z.Ilosc * (z.tbl_Leki.Cena ?? 0));
 
-                var ilosciZamowien = zamowienia.Select(z => z.Ilosc).ToList();
-                var datyZamowien = zamowienia.Select(z => z.DataZamowienia).ToList();
+                var ilosciZamowien = zamowieniaLista.Select(z => z.Ilosc).ToList();
+                var datyZamowien = zamowieniaLista.Select(z => z.DataZamowienia).ToList();
 
                 return (calkowitaSprzedaz, sredniaCena, lacznePrzychody, ilosciZamowien, datyZamowien);
             }
+        }
+        private void AktualizujWykres_Click(object sender, RoutedEventArgs e)
+        {
+            string wybranyLek = LekComboBox.SelectedItem as string;
+
+            if (!string.IsNullOrEmpty(wybranyLek))
+            {
+                DateTime? startDate = StartDatePicker.SelectedDate;
+                DateTime? endDate = EndDatePicker.SelectedDate;
+
+                var statystyki = GetStatystykiDlaLeku(wybranyLek, startDate, endDate);
+
+                CalkowitaSprzedazLabel.Content = statystyki.CalkowitaSprzedaz.ToString();
+                SredniaCenaLabel.Content = $"{statystyki.SredniaCena:C}";
+                LacznePrzychodyLabel.Content = $"{statystyki.LacznePrzychody:C}";
+
+                HistoriaZamowienWykres.Series = new SeriesCollection
+        {
+            new LineSeries
+            {
+                Title = wybranyLek,
+                Values = new ChartValues<int>(statystyki.IstoriaZamowien)
+            }
+        };
+
+                HistoriaZamowienWykres.AxisX[0].Labels = statystyki.DatyZamowien.Select(d => d.ToShortDateString()).ToArray();
+            }
+        }
+        private void EksportujPDF_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "PDF files (*.pdf)|*.pdf",
+                Title = "Zapisz wykres jako PDF"
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    RenderTargetBitmap renderBitmap = new RenderTargetBitmap(
+                        (int)HistoriaZamowienWykres.ActualWidth,
+                        (int)HistoriaZamowienWykres.ActualHeight,
+                        96, 96, PixelFormats.Pbgra32);
+
+                    renderBitmap.Render(HistoriaZamowienWykres);
+
+                    PngBitmapEncoder encoder = new PngBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        encoder.Save(stream);
+                        byte[] imageData = stream.ToArray();
+
+                        using (FileStream fs = new FileStream(saveFileDialog.FileName, FileMode.Create))
+                        {
+                            Document document = new Document();
+                            PdfWriter writer = PdfWriter.GetInstance(document, fs);
+                            document.Open();
+
+                            iTextSharp.text.Image pdfImage = iTextSharp.text.Image.GetInstance(imageData);
+                            pdfImage.ScaleToFit(500, 500);
+                            document.Add(pdfImage);
+
+                            document.Close();
+                            writer.Close();
+                        }
+                    }
+
+                    MessageBox.Show("Wykres został zapisany do PDF.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Błąd zapisu PDF: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+        private void ResetujDaty_Click(object sender, RoutedEventArgs e)
+        {
+            StartDatePicker.SelectedDate = null;
+            EndDatePicker.SelectedDate = null;
         }
 
         public void ReceptyStatystyka()
